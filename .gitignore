@@ -1,2 +1,4 @@
 /.idea/
 /src/main/java/kidchai/controllers/
+/src/resources/databace.properties
+/src/main/java/kidchai/dao/PersonMapper.java
