@@ -3,14 +3,14 @@ package kidchai.models;
 public class Person {
     private int id;
     private String name;
+    private int birthYear;
 
     public Person(){}
-    public Person(int id, String name, int yearOfBirth) {
+    public Person(int id, String name, int birthYear) {
         this.id = id;
         this.name = name;
-        this.yearOfBirth = yearOfBirth;
+        this.birthYear = birthYear;
     }
-    private int yearOfBirth;
 
     public int getId() {
         return id;
@@ -28,11 +28,11 @@ public class Person {
         this.name = name;
     }
 
-    public int getYearOfBirth() {
-        return yearOfBirth;
+    public int getBirthYear() {
+        return birthYear;
     }
 
-    public void setYearOfBirth(int yearOfBirth) {
-        this.yearOfBirth = yearOfBirth;
+    public void setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
     }
 }

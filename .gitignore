@@ -1,5 +1,4 @@
 /.idea/
 /src/resources/databace.properties
-/src/main/java/kidchai/dao/PersonMapper.java
 /src/main/resources/database.properties
 /target/
