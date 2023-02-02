@@ -28,7 +28,7 @@ public class PersonDao {
     }
 
     public void save(Person person) {
-        jdbcTemplate.update("INSERT INTO Person VALUES (1, ?, ?)", person.getName(), person.getBirthYear());
+        jdbcTemplate.update("INSERT INTO Person(name, birth_year) VALUES (?, ?)", person.getName(), person.getBirthYear());
     }
 
     public void update(int id, Person updatedPerson) {
@@ -37,6 +37,6 @@ public class PersonDao {
     }
 
     public void delete(int id) {
-        jdbcTemplate.update("DELETE FROM Person WHERE ID=?", id);
+        jdbcTemplate.update("DELETE FROM Person WHERE id=?", id);
     }
 }
