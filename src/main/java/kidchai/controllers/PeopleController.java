@@ -65,6 +65,6 @@ public class PeopleController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
         personDao.delete(id);
-        return "people/index";
+        return "redirect:/people";
     }
 }
