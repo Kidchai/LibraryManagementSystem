@@ -6,5 +6,8 @@
 </head>
 <body>
 <p th:text="${person.getName() + ', ' + person.getBirthYear()}">VALUE</p>
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+    <input type="submit" value="Delete"/>
+</form>
 </body>
 </html>
