@@ -1,11 +1,17 @@
 package kidchai.models;
 
+import jakarta.validation.constraints.NotEmpty;
+
 public class Person {
     private int id;
+    @NotEmpty(message = "Name should be not empty")
     private String name;
+    @NotEmpty(message = "Year of birth should be not empty")
     private int birthYear;
 
-    public Person(){}
+    public Person() {
+    }
+
     public Person(int id, String name, int birthYear) {
         this.id = id;
         this.name = name;
