@@ -1,7 +1,6 @@
 package kidchai.models;
 
 import jakarta.validation.constraints.NotEmpty;
-import kidchai.dao.BookDao;
 
 public class Book {
     private int id;
@@ -17,7 +16,7 @@ public class Book {
 
     private int userId;
 
-    private String owner;
+    private String holder = null;
 
     public Book() {
     }
@@ -69,11 +68,11 @@ public class Book {
         this.userId = userId;
     }
 
-    public String getOwner() {
-        return owner;
+    public String getHolder() {
+        return holder;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setHolder(String owner) {
+        this.holder = owner;
     }
 }
