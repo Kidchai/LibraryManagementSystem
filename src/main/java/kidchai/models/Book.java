@@ -1,6 +1,7 @@
 package kidchai.models;
 
 import jakarta.validation.constraints.NotEmpty;
+import kidchai.dao.BookDao;
 
 public class Book {
     private int id;
@@ -13,6 +14,10 @@ public class Book {
 
     @NotEmpty(message = "Year of publication should be not empty")
     private int year;
+
+    private int userId;
+
+    private String owner;
 
     public Book() {
     }
@@ -54,5 +59,21 @@ public class Book {
 
     public void setYear(int birthYear) {
         this.year = birthYear;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+    
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }
