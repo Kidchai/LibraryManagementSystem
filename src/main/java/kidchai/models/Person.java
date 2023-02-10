@@ -9,8 +9,6 @@ public class Person {
     @NotEmpty(message = "Year of birth should be not empty")
     private int birthYear;
 
-    private String book;
-
     public Person() {
     }
 
@@ -42,13 +40,5 @@ public class Person {
 
     public void setBirthYear(int birthYear) {
         this.birthYear = birthYear;
-    }
-
-    public String getBook() {
-        return book;
-    }
-
-    public void setBook(String books) {
-        this.book = books;
     }
 }

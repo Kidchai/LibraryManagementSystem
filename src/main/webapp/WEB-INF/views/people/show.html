@@ -6,7 +6,11 @@
 </head>
 <body>
 <p th:text="${person.getName() + ', ' + person.getBirthYear()}">person</p>
-<p th:text="${person.getBook()}">book</p>
+<table>
+<tr th:each="book : ${books}">
+    <td th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</td>
+</tr>
+</table>
 <a th:href="@{/people/{id}/edit(id=${person.getId()})}">Edit</a>
 <hr/>
 <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">

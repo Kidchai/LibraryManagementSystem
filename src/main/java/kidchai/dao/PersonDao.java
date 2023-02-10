@@ -1,5 +1,6 @@
 package kidchai.dao;
 
+import kidchai.models.Book;
 import kidchai.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -19,21 +20,17 @@ public class PersonDao {
     }
 
     public List<Person> index() {
-        return jdbcTemplate.query("SELECT * FROM Person", new BeanPropertyRowMapper<>(Person.class));
+        return jdbcTemplate.query("SELECT * FROM person", new BeanPropertyRowMapper<>(Person.class));
     }
 
     public Optional<Person> show(int id, String name, int birthYear) {
-        return jdbcTemplate.query("SELECT * FROM Person WHERE id!=? AND name=? AND birth_year=?",
+        return jdbcTemplate.query("SELECT * FROM person WHERE id!=? AND name=? AND birth_year=?",
                         new Object[]{id, name, birthYear}, new BeanPropertyRowMapper<>(Person.class))
                 .stream().findAny();
     }
 
     public Person show(int id) {
-        jdbcTemplate.query("SELECT * FROM person WHERE person.id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class));
-
-        return jdbcTemplate.query("SELECT person.*, CONCAT(title, ', ', author, ', ', year) AS book  FROM person LEFT OUTER JOIN book " +
-                                "ON person.id = book.person_id WHERE person.id=?", new Object[]{id},
-                        new BeanPropertyRowMapper<>(Person.class))
+        return jdbcTemplate.query("SELECT * FROM person WHERE person.id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
                 .stream().findAny().orElse(null);
     }
 
@@ -48,5 +45,9 @@ public class PersonDao {
 
     public void delete(int id) {
         jdbcTemplate.update("DELETE FROM Person WHERE id=?", id);
+    }
+
+    public List<Book> getPersonBooks(int id) {
+        return jdbcTemplate.query("SELECT * FROM book WHERE person_id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Book.class));
     }
 }
