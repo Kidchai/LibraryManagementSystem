@@ -29,7 +29,10 @@ public class PersonDao {
     }
 
     public Person show(int id) {
-        return jdbcTemplate.query("SELECT * FROM Person WHERE id=?", new Object[]{id},
+        jdbcTemplate.query("SELECT * FROM person WHERE person.id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class));
+
+        return jdbcTemplate.query("SELECT person.*, CONCAT(title, ', ', author, ', ', year) AS book  FROM person LEFT OUTER JOIN book " +
+                                "ON person.id = book.person_id WHERE person.id=?", new Object[]{id},
                         new BeanPropertyRowMapper<>(Person.class))
                 .stream().findAny().orElse(null);
     }
