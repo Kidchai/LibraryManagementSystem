@@ -6,8 +6,10 @@
 </head>
 <body>
 <p th:text="${person.getName() + ', ' + person.getBirthYear()}">person</p>
+<p th:if="${books.isEmpty()}">This person doesn't keep any books.</p>
 <table>
-<tr th:each="book : ${books}">
+<tr th:if="${!books.isEmpty()}"
+        th:each="book : ${books}">
     <td th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</td>
 </tr>
 </table>
