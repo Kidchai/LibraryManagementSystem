@@ -8,10 +8,12 @@
 <p th:text="${person.getName() + ', ' + person.getBirthYear()}">person</p>
 <p th:if="${books.isEmpty()}">This person doesn't keep any books.</p>
 <table>
-<tr th:if="${!books.isEmpty()}"
-        th:each="book : ${books}">
-    <td th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</td>
-</tr>
+    <tr th:if="${!books.isEmpty()}">
+        <p><strong>Books</strong></p>
+    <tr th:each="book : ${books}">
+        <p th:text="'- ' + ${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</p>
+    </tr>
+    </tr>
 </table>
 <a th:href="@{/people/{id}/edit(id=${person.getId()})}">Edit</a>
 <hr/>
