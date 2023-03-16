@@ -18,26 +18,27 @@ public class BookDao {
     }
 
     public List<Book> index() {
-        return jdbcTemplate.query("SELECT id, title, author, year FROM book", new BeanPropertyRowMapper<>(Book.class));
+        return jdbcTemplate.query("SELECT id, title, author, year FROM books", new BeanPropertyRowMapper<>(Book.class));
     }
 
     public Book show(int id) {
-        return jdbcTemplate.query("SELECT Book.*, Person.name as holder FROM Book LEFT OUTER JOIN person ON Person.id = Book.person_id WHERE book.id=?", new Object[]{id},
+        return jdbcTemplate.query("SELECT books.*, people.name as holder FROM books LEFT OUTER JOIN " +
+                                "people ON people.id = books.person_id WHERE books.id=?", new Object[]{id},
                         new BeanPropertyRowMapper<>(Book.class))
                 .stream().findAny().orElse(null);
     }
 
     public void save(Book book) {
-        jdbcTemplate.update("INSERT INTO Book(title, author, year) VALUES (?, ?, ?)",
+        jdbcTemplate.update("INSERT INTO books(title, author, year) VALUES (?, ?, ?)",
                 book.getTitle(), book.getAuthor(), book.getYear());
     }
 
     public void update(int id, Book updatedBook) {
-        jdbcTemplate.update("UPDATE Book SET title=?, author=?, year=? WHERE id=?",
+        jdbcTemplate.update("UPDATE books SET title=?, author=?, year=? WHERE id=?",
                 updatedBook.getTitle(), updatedBook.getAuthor(), updatedBook.getYear(), id);
     }
 
     public void delete(int id) {
-        jdbcTemplate.update("DELETE FROM Book WHERE id=?", id);
+        jdbcTemplate.update("DELETE FROM books WHERE id=?", id);
     }
 }
