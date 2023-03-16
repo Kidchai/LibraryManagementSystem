@@ -2,7 +2,9 @@ package kidchai.controllers;
 
 import jakarta.validation.Valid;
 import kidchai.dao.BookDao;
+import kidchai.dao.PersonDao;
 import kidchai.models.Book;
+import kidchai.models.Person;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 public class BooksController {
 
     private final BookDao bookDao;
+    private final PersonDao personDao;
 
-    public BooksController(BookDao bookDao) {
+    public BooksController(BookDao bookDao, PersonDao personDao) {
         this.bookDao = bookDao;
+        this.personDao = personDao;
     }
 
     @GetMapping()
@@ -24,8 +28,12 @@ public class BooksController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
         model.addAttribute("book", bookDao.show(id));
+        Person bookHolder = bookDao.getHolder(id);
+        if (bookHolder != null) {
+            model.addAttribute("holder", bookHolder);
+        }
         return "books/show";
     }
 
@@ -56,5 +64,12 @@ public class BooksController {
     public String delete(@PathVariable("id") int id) {
         bookDao.delete(id);
         return "redirect:/books";
+    }
+
+    @PatchMapping("/{id}/release")
+    public String release(@PathVariable("id") int id) {
+        System.out.println("controller release");
+        bookDao.release(id);
+        return "redirect:/books/" + id;
     }
 }

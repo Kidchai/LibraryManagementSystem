@@ -1,6 +1,7 @@
 package kidchai.dao;
 
 import kidchai.models.Book;
+import kidchai.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,9 +23,7 @@ public class BookDao {
     }
 
     public Book show(int id) {
-        return jdbcTemplate.query("SELECT books.*, people.name as holder FROM books LEFT OUTER JOIN " +
-                                "people ON people.id = books.person_id WHERE books.id=?", new Object[]{id},
-                        new BeanPropertyRowMapper<>(Book.class))
+        return jdbcTemplate.query("SELECT * FROM books WHERE books.id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Book.class))
                 .stream().findAny().orElse(null);
     }
 
@@ -40,5 +39,14 @@ public class BookDao {
 
     public void delete(int id) {
         jdbcTemplate.update("DELETE FROM books WHERE id=?", id);
+    }
+
+    public Person getHolder(int id) {
+        return jdbcTemplate.query("SELECT people.* FROM books JOIN people ON books.person_id = people.id WHERE books.id =?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
+                .stream().findAny().orElse(null);
+    }
+
+    public void release(int id) {
+        jdbcTemplate.update("UPDATE books SET person_id=null WHERE id=?", id);
     }
 }

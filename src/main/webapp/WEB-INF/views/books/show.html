@@ -6,7 +6,14 @@
 </head>
 <body>
 <p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</p>
-<p th:text="${book.getHolder()} ?: 'Available'">holder</p>
+
+<div th:if="${holder}">
+    <p th:text="'Current holder: ' + ${holder.getName()}">current holder</p>
+    <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}">
+        <input type="submit" value="Release"/>
+    </form>
+</div>
+
 <hr/>
 <form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getId()})}">
     <input type="submit" value="Edit"/>

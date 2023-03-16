@@ -16,8 +16,6 @@ public class Book {
 
     private int userId;
 
-    private String holder = null;
-
     public Book() {
     }
 
@@ -63,16 +61,8 @@ public class Book {
     public int getUserId() {
         return userId;
     }
-    
+
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public String getHolder() {
-        return holder;
-    }
-
-    public void setHolder(String owner) {
-        this.holder = owner;
     }
 }
