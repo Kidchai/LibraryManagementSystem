@@ -33,6 +33,8 @@ public class BooksController {
         Person bookHolder = bookDao.getHolder(id);
         if (bookHolder != null) {
             model.addAttribute("holder", bookHolder);
+        } else {
+            model.addAttribute("people", personDao.index());
         }
         return "books/show";
     }
@@ -68,8 +70,13 @@ public class BooksController {
 
     @PatchMapping("/{id}/release")
     public String release(@PathVariable("id") int id) {
-        System.out.println("controller release");
         bookDao.release(id);
+        return "redirect:/books/" + id;
+    }
+
+    @PatchMapping("/{id}/assign")
+    public String assign(@PathVariable("id") int id, @ModelAttribute("person") Person person) {
+        bookDao.assign(id, person);
         return "redirect:/books/" + id;
     }
 }

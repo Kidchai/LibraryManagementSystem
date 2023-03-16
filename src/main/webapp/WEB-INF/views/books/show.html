@@ -14,6 +14,20 @@
     </form>
 </div>
 
+<div th:if="${people}">
+    <p>Available. Who is going to take it?</p>
+    <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}">
+        <label for="person">Pick a new holder</label>
+        <select th:object="${person}" th:field="*{id}" id="person">
+                <option th:each="person : ${people}"
+                        th:value="${person.getId()}"
+                        th:text="${person.getName()}">
+                </option>
+            </select>
+        <input type="submit" value="Assign the book"/>
+    </form>
+</div>
+
 <hr/>
 <form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getId()})}">
     <input type="submit" value="Edit"/>
