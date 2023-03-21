@@ -27,15 +27,18 @@ public class BookDao {
         return session.createQuery(hql, Book.class).getResultList();
     }
 
-//    public Book show(int id) {
-//        return jdbcTemplate.query("SELECT * FROM books WHERE books.id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Book.class))
-//                .stream().findAny().orElse(null);
-//    }
-//
-//    public void save(Book book) {
-//        jdbcTemplate.update("INSERT INTO books(title, author, year) VALUES (?, ?, ?)",
-//                book.getTitle(), book.getAuthor(), book.getYear());
-//    }
+
+    @Transactional(readOnly = true)
+    public Book show(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Book.class, id);
+    }
+
+    @Transactional
+    public void save(Book book) {
+        Session session = sessionFactory.getCurrentSession();
+        session.save(book);
+    }
 //
 //    public void update(int id, Book updatedBook) {
 //        jdbcTemplate.update("UPDATE books SET title=?, author=?, year=? WHERE id=?",

@@ -38,17 +38,17 @@ public class BooksController {
 //        }
 //        return "books/show";
 //    }
-//
-//    @GetMapping("/new")
-//    public String newBook(@ModelAttribute("book") @Valid Book book) {
-//        return "books/new";
-//    }
-//
-//    @PostMapping()
-//    public String create(@ModelAttribute("book") @Valid Book book) {
-//        bookDao.save(book);
-//        return "redirect:/books";
-//    }
+
+    @GetMapping("/new")
+    public String newBook(@ModelAttribute("book") Book book) {
+        return "books/new";
+    }
+
+    @PostMapping()
+    public String create(@ModelAttribute("book") @Valid Book book) {
+        bookDao.save(book);
+        return "redirect:/books";
+    }
 //
 //    @GetMapping("/{id}/edit")
 //    public String edit(@PathVariable("id") int id, Model model) {
