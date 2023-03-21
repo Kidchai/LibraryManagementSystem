@@ -1,26 +1,36 @@
 package kidchai.models;
 
-import jakarta.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "books")
 public class Book {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "title")
     @NotEmpty(message = "Title should be not empty")
     private String title;
 
+    @Column(name = "author")
     @NotEmpty(message = "Author should be not empty")
     private String author;
 
+    @Column(name = "year")
     @NotEmpty(message = "Year of publication should be not empty")
     private int year;
 
-    private int userId;
+    //@Column(name = "person_id")
+    //private int userId;
 
     public Book() {
     }
 
-    public Book(int id, String title, String author, int year) {
-        this.id = id;
+    public Book(String title, String author, int year) {
         this.title = title;
         this.author = author;
         this.year = year;
@@ -58,11 +68,11 @@ public class Book {
         this.year = birthYear;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+//    public int getUserId() {
+//        return userId;
+//    }
+//
+//    public void setUserId(int userId) {
+//        this.userId = userId;
+//    }
 }

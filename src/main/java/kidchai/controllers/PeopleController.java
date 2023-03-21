@@ -1,6 +1,6 @@
 package kidchai.controllers;
 
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import kidchai.dao.PersonDao;
 import kidchai.models.Person;
 import kidchai.util.PersonValidator;
@@ -22,55 +22,55 @@ public class PeopleController {
         this.personValidator = personValidator;
     }
 
-    @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("people", personDao.index());
-        return "people/index";
-    }
-
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", personDao.show(id));
-        model.addAttribute("books", personDao.getPersonBooks(id));
-        return "people/show";
-    }
-
-    @GetMapping("/new")
-    public String newPerson(@ModelAttribute("person") @Valid Person person) {
-        return "people/new";
-    }
-
-    @PostMapping()
-    public String create(@ModelAttribute("person") @Valid Person person,
-                         BindingResult bindingResult) {
-        personValidator.validate(person, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "people/new";
-        }
-        personDao.save(person);
-        return "redirect:/people";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", personDao.show(id));
-        return "people/edit";
-    }
-
-    @PatchMapping("/{id}")
-    public String update(@ModelAttribute("person") @Valid Person person,
-                         BindingResult bindingResult, @PathVariable("id") int id) {
-        personValidator.validate(person, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "people/edit";
-        }
-        personDao.update(id, person);
-        return "redirect:/people";
-    }
-
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
-        personDao.delete(id);
-        return "redirect:/people";
-    }
+//    @GetMapping()
+//    public String index(Model model) {
+//        model.addAttribute("people", personDao.index());
+//        return "people/index";
+//    }
+//
+//    @GetMapping("/{id}")
+//    public String show(@PathVariable("id") int id, Model model) {
+//        model.addAttribute("person", personDao.show(id));
+//        model.addAttribute("books", personDao.getPersonBooks(id));
+//        return "people/show";
+//    }
+//
+//    @GetMapping("/new")
+//    public String newPerson(@ModelAttribute("person") @Valid Person person) {
+//        return "people/new";
+//    }
+//
+//    @PostMapping()
+//    public String create(@ModelAttribute("person") @Valid Person person,
+//                         BindingResult bindingResult) {
+//        personValidator.validate(person, bindingResult);
+//        if (bindingResult.hasErrors()) {
+//            return "people/new";
+//        }
+//        personDao.save(person);
+//        return "redirect:/people";
+//    }
+//
+//    @GetMapping("/{id}/edit")
+//    public String edit(@PathVariable("id") int id, Model model) {
+//        model.addAttribute("person", personDao.show(id));
+//        return "people/edit";
+//    }
+//
+//    @PatchMapping("/{id}")
+//    public String update(@ModelAttribute("person") @Valid Person person,
+//                         BindingResult bindingResult, @PathVariable("id") int id) {
+//        personValidator.validate(person, bindingResult);
+//        if (bindingResult.hasErrors()) {
+//            return "people/edit";
+//        }
+//        personDao.update(id, person);
+//        return "redirect:/people";
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public String delete(@PathVariable("id") int id) {
+//        personDao.delete(id);
+//        return "redirect:/people";
+//    }
 }
