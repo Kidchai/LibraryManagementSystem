@@ -1,13 +1,15 @@
 package kidchai.controllers;
 
 import kidchai.dao.PersonDao;
+import kidchai.models.Person;
 import kidchai.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/people")
@@ -34,22 +36,22 @@ public class PeopleController {
         return "people/show";
     }
 
-//    @GetMapping("/new")
-//    public String newPerson(@ModelAttribute("person") @Valid Person person) {
-//        return "people/new";
-//    }
-//
-//    @PostMapping()
-//    public String create(@ModelAttribute("person") @Valid Person person,
-//                         BindingResult bindingResult) {
-//        personValidator.validate(person, bindingResult);
-//        if (bindingResult.hasErrors()) {
-//            return "people/new";
-//        }
-//        personDao.save(person);
-//        return "redirect:/people";
-//    }
-//
+    @GetMapping("/new")
+    public String newPerson(@ModelAttribute("person") Person person) {
+        return "people/new";
+    }
+
+    @PostMapping()
+    public String create(@ModelAttribute("person") Person person,
+                         BindingResult bindingResult) {
+        personValidator.validate(person, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "people/new";
+        }
+        personDao.save(person);
+        return "redirect:/people";
+    }
+
 //    @GetMapping("/{id}/edit")
 //    public String edit(@PathVariable("id") int id, Model model) {
 //        model.addAttribute("person", personDao.show(id));

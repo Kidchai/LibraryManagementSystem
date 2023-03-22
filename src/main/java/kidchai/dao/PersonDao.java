@@ -30,16 +30,13 @@ public class PersonDao {
         Session session = sessionFactory.getCurrentSession();
         return session.get(Person.class, id);
     }
-//
-//    public Person show(int id) {
-//        return jdbcTemplate.query("SELECT * FROM people WHERE people.id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
-//                .stream().findAny().orElse(null);
-//    }
-//
-//    public void save(Person person) {
-//        jdbcTemplate.update("INSERT INTO people(name, birth_year) VALUES (?, ?)", person.getName(), person.getBirthYear());
-//    }
-//
+
+    @Transactional
+    public void save(Person person) {
+        Session session = sessionFactory.getCurrentSession();
+        session.save(person);
+    }
+
 //    public void update(int id, Person updatedPerson) {
 //        jdbcTemplate.update("UPDATE people SET name=?, birth_year=? WHERE id=?",
 //                updatedPerson.getName(), updatedPerson.getBirthYear(), id);

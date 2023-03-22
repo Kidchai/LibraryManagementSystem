@@ -2,6 +2,7 @@ package kidchai.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "people")
@@ -14,7 +15,7 @@ public class Person {
     @NotEmpty(message = "Name should be not empty")
     private String name;
     @Column(name = "birth_year")
-    @NotEmpty(message = "Year of birth should be not empty")
+    @NotNull(message = "Year of birth should be not empty")
     private int birthYear;
 
     public Person() {
