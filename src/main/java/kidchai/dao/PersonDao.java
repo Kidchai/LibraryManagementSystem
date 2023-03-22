@@ -45,9 +45,11 @@ public class PersonDao {
         targetPerson.setBirthYear(updatedPerson.getBirthYear());
     }
 
-//    public void delete(int id) {
-//        jdbcTemplate.update("DELETE FROM people WHERE id=?", id);
-//    }
+    @Transactional
+    public void delete(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        session.remove(session.get(Person.class, id));
+    }
 
     @Transactional
     public List<Book> getPersonBooks(int id) {
