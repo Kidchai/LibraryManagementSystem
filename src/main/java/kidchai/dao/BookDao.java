@@ -1,11 +1,10 @@
 package kidchai.dao;
 
 import kidchai.models.Book;
-//import kidchai.models.Person;
+import kidchai.models.Person;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,15 +38,21 @@ public class BookDao {
         Session session = sessionFactory.getCurrentSession();
         session.save(book);
     }
-//
-//    public void update(int id, Book updatedBook) {
-//        jdbcTemplate.update("UPDATE books SET title=?, author=?, year=? WHERE id=?",
-//                updatedBook.getTitle(), updatedBook.getAuthor(), updatedBook.getYear(), id);
-//    }
-//
-//    public void delete(int id) {
-//        jdbcTemplate.update("DELETE FROM books WHERE id=?", id);
-//    }
+
+    @Transactional
+    public void update(int id, Book updatedBook) {
+        Session session = sessionFactory.getCurrentSession();
+        Book targetBook = session.get(Book.class, id);
+        targetBook.setTitle(updatedBook.getTitle());
+        targetBook.setAuthor(updatedBook.getAuthor());
+        targetBook.setYear(updatedBook.getYear());
+    }
+
+    @Transactional
+    public void delete(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        session.remove(session.get(Book.class, id));
+    }
 //
 //    public Person getHolder(int id) {
 //        return jdbcTemplate.query("SELECT people.* FROM books JOIN people ON books.person_id = people.id " +
