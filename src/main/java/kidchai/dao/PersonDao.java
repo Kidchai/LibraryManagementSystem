@@ -37,11 +37,14 @@ public class PersonDao {
         session.save(person);
     }
 
-//    public void update(int id, Person updatedPerson) {
-//        jdbcTemplate.update("UPDATE people SET name=?, birth_year=? WHERE id=?",
-//                updatedPerson.getName(), updatedPerson.getBirthYear(), id);
-//    }
-//
+    @Transactional
+    public void update(int id, Person updatedPerson) {
+        Session session = sessionFactory.getCurrentSession();
+        Person targetPerson = session.get(Person.class, id);
+        targetPerson.setName(updatedPerson.getName());
+        targetPerson.setBirthYear(updatedPerson.getBirthYear());
+    }
+
 //    public void delete(int id) {
 //        jdbcTemplate.update("DELETE FROM people WHERE id=?", id);
 //    }
