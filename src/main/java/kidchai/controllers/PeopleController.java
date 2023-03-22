@@ -1,14 +1,13 @@
 package kidchai.controllers;
 
-import javax.validation.Valid;
 import kidchai.dao.PersonDao;
-import kidchai.models.Person;
 import kidchai.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/people")
@@ -28,13 +27,13 @@ public class PeopleController {
         return "people/index";
     }
 
-//    @GetMapping("/{id}")
-//    public String show(@PathVariable("id") int id, Model model) {
-//        model.addAttribute("person", personDao.show(id));
-//        model.addAttribute("books", personDao.getPersonBooks(id));
-//        return "people/show";
-//    }
-//
+    @GetMapping("/{id}")
+    public String show(@PathVariable("id") int id, Model model) {
+        model.addAttribute("person", personDao.show(id));
+        model.addAttribute("books", personDao.getPersonBooks(id));
+        return "people/show";
+    }
+
 //    @GetMapping("/new")
 //    public String newPerson(@ModelAttribute("person") @Valid Person person) {
 //        return "people/new";

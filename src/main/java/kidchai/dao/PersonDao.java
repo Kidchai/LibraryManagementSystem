@@ -5,12 +5,10 @@ import kidchai.models.Person;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class PersonDao {
@@ -26,12 +24,12 @@ public class PersonDao {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select p from Person p", Person.class).getResultList();
     }
-//
-//    public Optional<Person> show(int id, String name, int birthYear) {
-//        return jdbcTemplate.query("SELECT * FROM people WHERE id!=? AND name=? AND birth_year=?",
-//                        new Object[]{id, name, birthYear}, new BeanPropertyRowMapper<>(Person.class))
-//                .stream().findAny();
-//    }
+
+    @Transactional(readOnly = true)
+    public Person show(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Person.class, id);
+    }
 //
 //    public Person show(int id) {
 //        return jdbcTemplate.query("SELECT * FROM people WHERE people.id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
@@ -50,8 +48,12 @@ public class PersonDao {
 //    public void delete(int id) {
 //        jdbcTemplate.update("DELETE FROM people WHERE id=?", id);
 //    }
-//
-//    public List<Book> getPersonBooks(int id) {
-//        return jdbcTemplate.query("SELECT * FROM books WHERE person_id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Book.class));
-//    }
+
+    @Transactional
+    public List<Book> getPersonBooks(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        var query = session.createQuery("select b from Book b where b.userId=:i", Book.class);
+        query.setParameter("i",id);
+        return query.getResultList();
+    }
 }

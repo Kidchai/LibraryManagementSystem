@@ -1,8 +1,7 @@
 package kidchai.models;
 
-import javax.validation.constraints.NotEmpty;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -25,8 +24,8 @@ public class Book {
     @NotNull(message = "Year of publication should be not empty")
     private int year;
 
-    //@Column(name = "person_id")
-    //private int userId;
+    @Column(name = "person_id")
+    private int userId;
 
     public Book() {
     }
@@ -69,11 +68,11 @@ public class Book {
         this.year = birthYear;
     }
 
-//    public int getUserId() {
-//        return userId;
-//    }
-//
-//    public void setUserId(int userId) {
-//        this.userId = userId;
-//    }
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 }
