@@ -22,12 +22,12 @@ public class PeopleController {
         this.personValidator = personValidator;
     }
 
-//    @GetMapping()
-//    public String index(Model model) {
-//        model.addAttribute("people", personDao.index());
-//        return "people/index";
-//    }
-//
+    @GetMapping()
+    public String index(Model model) {
+        model.addAttribute("people", personDao.index());
+        return "people/index";
+    }
+
 //    @GetMapping("/{id}")
 //    public String show(@PathVariable("id") int id, Model model) {
 //        model.addAttribute("person", personDao.show(id));

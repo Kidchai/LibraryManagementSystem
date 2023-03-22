@@ -22,8 +22,7 @@ public class BookDao {
     @Transactional(readOnly = true)
     public List<Book> index() {
         Session session = sessionFactory.getCurrentSession();
-        String hql = "select b from Book b";
-        return session.createQuery(hql, Book.class).getResultList();
+        return session.createQuery("select b from Book b", Book.class).getResultList();
     }
 
 

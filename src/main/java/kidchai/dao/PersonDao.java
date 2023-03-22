@@ -2,10 +2,12 @@ package kidchai.dao;
 
 import kidchai.models.Book;
 import kidchai.models.Person;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,9 +21,11 @@ public class PersonDao {
         this.sessionFactory = sessionFactory;
     }
 
-//    public List<Person> index() {
-//        return jdbcTemplate.query("SELECT * FROM people", new BeanPropertyRowMapper<>(Person.class));
-//    }
+    @Transactional(readOnly = true)
+    public List<Person> index() {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select p from Person p", Person.class).getResultList();
+    }
 //
 //    public Optional<Person> show(int id, String name, int birthYear) {
 //        return jdbcTemplate.query("SELECT * FROM people WHERE id!=? AND name=? AND birth_year=?",
