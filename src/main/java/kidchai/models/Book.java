@@ -25,7 +25,7 @@ public class Book {
     private int year;
 
     @Column(name = "person_id")
-    private int userId;
+    private Integer personId;
 
     public Book() {
     }
@@ -68,11 +68,11 @@ public class Book {
         this.year = birthYear;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getPersonId() {
+        return personId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setPersonId(int personId) {
+        this.personId = personId;
     }
 }

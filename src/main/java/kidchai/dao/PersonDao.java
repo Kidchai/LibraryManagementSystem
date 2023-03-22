@@ -52,7 +52,7 @@ public class PersonDao {
     @Transactional
     public List<Book> getPersonBooks(int id) {
         Session session = sessionFactory.getCurrentSession();
-        var query = session.createQuery("select b from Book b where b.userId=:i", Book.class);
+        var query = session.createQuery("select b from Book b where b.personId=:i", Book.class);
         query.setParameter("i",id);
         return query.getResultList();
     }
