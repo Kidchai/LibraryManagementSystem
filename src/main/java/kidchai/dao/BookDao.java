@@ -63,12 +63,12 @@ public class BookDao {
                 .stream().findAny();
     }
 
-//    @Transactional
-//    public void release(int id) {
-//        Session session = sessionFactory.getCurrentSession();
-//        Book targetBook = session.get(Book.class, id);
-//        targetBook.setPersonId(0);
-//    }
+    @Transactional
+    public void release(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Book targetBook = session.get(Book.class, id);
+        targetBook.setPersonId(null);
+    }
 
     @Transactional
     public void assign(int id, Person person) {
