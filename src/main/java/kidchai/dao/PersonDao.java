@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.hibernate.query.Query;
 import java.util.List;
 
 @Component
@@ -30,6 +30,16 @@ public class PersonDao {
         Session session = sessionFactory.getCurrentSession();
         return session.get(Person.class, id);
     }
+
+//    @Transactional(readOnly = true)
+//    public Person show(int id, String name, int birthYear) {
+//        Session session = sessionFactory.getCurrentSession();
+//        Query query = session.createQuery("select p from Person p where p.id=:i and p.name=:n and p.birthYear=:y", Book.class);
+//        query.setParameter("i",id);
+//        query.setParameter("n",name);
+//        query.setParameter("y",birthYear);
+//        return (Person) query.getSingleResult();
+//    }
 
     @Transactional
     public void save(Person person) {
@@ -54,7 +64,7 @@ public class PersonDao {
     @Transactional
     public List<Book> getPersonBooks(int id) {
         Session session = sessionFactory.getCurrentSession();
-        var query = session.createQuery("select b from Book b where b.personId=:i", Book.class);
+        Query<Book> query = session.createQuery("select b from Book b where b.personId=:i", Book.class);
         query.setParameter("i",id);
         return query.getResultList();
     }

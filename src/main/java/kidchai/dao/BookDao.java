@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class BookDao {
@@ -52,12 +53,15 @@ public class BookDao {
         Session session = sessionFactory.getCurrentSession();
         session.remove(session.get(Book.class, id));
     }
-//
-//    public Person getHolder(int id) {
-//        return jdbcTemplate.query("SELECT people.* FROM books JOIN people ON books.person_id = people.id " +
-//                        "WHERE books.id =?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
-//                .stream().findAny().orElse(null);
-//    }
+
+    @Transactional(readOnly = true)
+    public Optional<Person> getHolder(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select p from Book b join Person p on p.id=b.personId where b.id=:id", Person.class)
+                .setParameter("id", id)
+                .getResultList()
+                .stream().findAny();
+    }
 //
 //    public void release(int id) {
 //        jdbcTemplate.update("UPDATE books SET person_id=null WHERE id=?", id);

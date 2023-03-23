@@ -32,7 +32,7 @@ public class PersonValidator implements Validator {
 //    @Override
 //    public void validate(Object target, Errors errors) {
 //        Person person = (Person) target;
-//        if (personDao.show(person.getId(), person.getName(), person.getBirthYear()).isPresent()) {
+//        if (personDao.show(person.getId(), person.getName(), person.getBirthYear()) != null) {
 //            errors.rejectValue("name", "", "This user already registered");
 //        }
 //    }

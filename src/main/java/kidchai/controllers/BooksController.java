@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/books")
 public class BooksController {
@@ -27,17 +29,17 @@ public class BooksController {
         return "books/index";
     }
 
-//    @GetMapping("/{id}")
-//    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
-//        model.addAttribute("book", bookDao.show(id));
-//        Person bookHolder = bookDao.getHolder(id);
-//        if (bookHolder != null) {
-//            model.addAttribute("holder", bookHolder);
-//        } else {
-//            model.addAttribute("people", personDao.index());
-//        }
-//        return "books/show";
-//    }
+    @GetMapping("/{id}")
+    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
+        model.addAttribute("book", bookDao.show(id));
+        Optional<Person> bookHolder = bookDao.getHolder(id);
+        if (bookHolder.isPresent()) {
+            model.addAttribute("holder", bookHolder);
+        } else {
+            model.addAttribute("people", personDao.index());
+        }
+        return "books/show";
+    }
 
     @GetMapping("/new")
     public String newBook(@ModelAttribute("book") Book book) {
