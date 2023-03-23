@@ -34,7 +34,7 @@ public class BooksController {
         model.addAttribute("book", bookDao.show(id));
         Optional<Person> bookHolder = bookDao.getHolder(id);
         if (bookHolder.isPresent()) {
-            model.addAttribute("holder", bookHolder);
+            model.addAttribute("holder", bookHolder.get());
         } else {
             model.addAttribute("people", personDao.index());
         }
