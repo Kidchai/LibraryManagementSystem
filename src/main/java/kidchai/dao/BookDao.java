@@ -62,12 +62,18 @@ public class BookDao {
                 .getResultList()
                 .stream().findAny();
     }
-//
+
+//    @Transactional
 //    public void release(int id) {
-//        jdbcTemplate.update("UPDATE books SET person_id=null WHERE id=?", id);
+//        Session session = sessionFactory.getCurrentSession();
+//        Book targetBook = session.get(Book.class, id);
+//        targetBook.setPersonId(0);
 //    }
-//
-//    public void assign(int id, Person person) {
-//        jdbcTemplate.update("UPDATE books SET person_id=? WHERE id=?", person.getId(), id);
-//    }
+
+    @Transactional
+    public void assign(int id, Person person) {
+        Session session = sessionFactory.getCurrentSession();
+        Book targetBook = session.get(Book.class, id);
+        targetBook.setPersonId(person.getId());
+    }
 }
