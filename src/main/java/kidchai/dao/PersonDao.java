@@ -1,13 +1,12 @@
 package kidchai.dao;
 
-import kidchai.models.Book;
 import kidchai.models.Person;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.hibernate.query.Query;
+
 import java.util.List;
 
 @Component
@@ -22,7 +21,7 @@ public class PersonDao {
     @Transactional(readOnly = true)
     public List<Person> index() {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select p from Person p", Person.class).getResultList();
+        return session.createQuery("from Person", Person.class).getResultList();
     }
 
     @Transactional(readOnly = true)
@@ -59,13 +58,5 @@ public class PersonDao {
     public void delete(int id) {
         Session session = sessionFactory.getCurrentSession();
         session.remove(session.get(Person.class, id));
-    }
-
-    @Transactional
-    public List<Book> getPersonBooks(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        Query<Book> query = session.createQuery("select b from Book b where b.personId=:i", Book.class);
-        query.setParameter("i",id);
-        return query.getResultList();
     }
 }

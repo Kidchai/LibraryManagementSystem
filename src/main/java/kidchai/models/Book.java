@@ -24,8 +24,17 @@ public class Book {
     @NotNull(message = "Year of publication should be not empty")
     private int year;
 
-    @Column(name = "person_id")
-    private Integer personId;
+    @ManyToOne
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    private Person holder;
+
+    public Person getHolder() {
+        return holder;
+    }
+
+    public void setHolder(Person holder) {
+        this.holder = holder;
+    }
 
     public Book() {
     }
@@ -66,13 +75,5 @@ public class Book {
 
     public void setYear(int birthYear) {
         this.year = birthYear;
-    }
-
-    public int getPersonId() {
-        return personId;
-    }
-
-    public void setPersonId(Integer personId) {
-        this.personId = personId;
     }
 }

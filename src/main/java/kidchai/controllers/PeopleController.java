@@ -31,8 +31,15 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", personDao.show(id));
-        model.addAttribute("books", personDao.getPersonBooks(id));
+        Person person = personDao.show(id);
+        model.addAttribute("person", person);
+        System.out.println(person.getName());
+        model.addAttribute("books", person.getBooks());
+        if (person.getBooks().isEmpty()) {
+            model.addAttribute("books", null);
+        } else {
+            model.addAttribute("books", person.getBooks());
+        }
         return "people/show";
     }
 

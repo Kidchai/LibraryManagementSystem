@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class BookDao {
@@ -23,7 +22,7 @@ public class BookDao {
     @Transactional(readOnly = true)
     public List<Book> index() {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select b from Book b", Book.class).getResultList();
+        return session.createQuery("from Book", Book.class).getResultList();
     }
 
 
@@ -54,26 +53,26 @@ public class BookDao {
         session.remove(session.get(Book.class, id));
     }
 
-    @Transactional(readOnly = true)
-    public Optional<Person> getHolder(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select p from Book b join Person p on p.id=b.personId where b.id=:id", Person.class)
-                .setParameter("id", id)
-                .getResultList()
-                .stream().findAny();
-    }
+//    @Transactional(readOnly = true)
+//    public Optional<Person> getHolder(int id) {
+//        Session session = sessionFactory.getCurrentSession();
+//        return session.createQuery("select p from Book b join Person p on p.id=b.personId where b.id=:id", Person.class)
+//                .setParameter("id", id)
+//                .getResultList()
+//                .stream().findAny();
+//    }
 
     @Transactional
     public void release(int id) {
         Session session = sessionFactory.getCurrentSession();
         Book targetBook = session.get(Book.class, id);
-        targetBook.setPersonId(null);
+        targetBook.setHolder(null);
     }
 
     @Transactional
     public void assign(int id, Person person) {
         Session session = sessionFactory.getCurrentSession();
         Book targetBook = session.get(Book.class, id);
-        targetBook.setPersonId(person.getId());
+        targetBook.setHolder(person);
     }
 }

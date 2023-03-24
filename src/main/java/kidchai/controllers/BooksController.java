@@ -1,6 +1,5 @@
 package kidchai.controllers;
 
-import javax.validation.Valid;
 import kidchai.dao.BookDao;
 import kidchai.dao.PersonDao;
 import kidchai.models.Book;
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/books")
@@ -31,12 +30,13 @@ public class BooksController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
-        model.addAttribute("book", bookDao.show(id));
-        Optional<Person> bookHolder = bookDao.getHolder(id);
-        if (bookHolder.isPresent()) {
-            model.addAttribute("holder", bookHolder.get());
-        } else {
+        Book book = bookDao.show(id);
+        model.addAttribute("book", book);
+        Person holder = book.getHolder();
+        if (holder == null) {
             model.addAttribute("people", personDao.index());
+        } else {
+            model.addAttribute("holder", holder);
         }
         return "books/show";
     }
