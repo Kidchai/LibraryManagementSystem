@@ -1,20 +1,15 @@
-Project for book management at library. Web-application for librarians.
+## Web-application for librarians to book management tasks
 
----
-
-This is the first part of my implementation of this management system with the same functionality but different libraries.
-
-[Library1]() stack: Java, Spring MVC, JDBC, PostgreSQL, Thymeleaf, HTML
-
----
-
-### Librarians can:
-- Create, delete, and edit book records
-- Register new people as customers
-- Edit information about customers, and delete customers' profiles
-- Borrow books to customers
-- Mark returned books as available
+The system empowers librarians to perform various tasks, including creating, editing, and deleting book records, registering new customers, modifying customer information, and removing customer profiles. Additionally, librarians can lend books to customers and track the return of books.
 
 ### How does it work?
-Look
 ![gif file with demonstration of app work](forReadme/library.gif)
+
+---
+
+I created three distinct versions of the app with identical functionality, each utilizing a different library as follows:
+
+- [Spring MVC + JDBC](https://github.com/Kidchai/LibraryManagementSystem/tree/Spring_MVC+JDBC)
+- [Spring MVC + Hibernate](https://github.com/Kidchai/LibraryManagementSystem/tree/Spring_MVC+Hibernate)
+
+other technologies: Java, PostgreSQL, Thymeleaf, HTML
