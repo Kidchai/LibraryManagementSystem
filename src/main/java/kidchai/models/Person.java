@@ -11,9 +11,11 @@ public class Person {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(name = "name")
-    @NotEmpty(message = "Name should be not empty")
+    @NotBlank(message = "Name should be not empty")
     private String name;
+
     @Column(name = "birth_year")
     @NotNull(message = "Year of birth should be not empty")
     @Min(value = 1900, message = "Year of birth should be greater than 1900")
