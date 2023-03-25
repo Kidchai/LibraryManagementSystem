@@ -2,7 +2,6 @@ package kidchai.controllers;
 
 import kidchai.dao.PersonDao;
 import kidchai.models.Person;
-import kidchai.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,12 +14,10 @@ import javax.validation.Valid;
 @RequestMapping("/people")
 public class PeopleController {
     private final PersonDao personDao;
-    private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonDao personDao, PersonValidator personValidator) {
+    public PeopleController(PersonDao personDao) {
         this.personDao = personDao;
-        this.personValidator = personValidator;
     }
 
     @GetMapping()
@@ -33,7 +30,6 @@ public class PeopleController {
     public String show(@PathVariable("id") int id, Model model) {
         Person person = personDao.show(id);
         model.addAttribute("person", person);
-        System.out.println(person.getName());
         model.addAttribute("books", person.getBooks());
         if (person.getBooks().isEmpty()) {
             model.addAttribute("books", null);
@@ -51,7 +47,6 @@ public class PeopleController {
     @PostMapping()
     public String create(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult) {
-        personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
             return "people/new";
         }
@@ -68,7 +63,6 @@ public class PeopleController {
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult, @PathVariable("id") int id) {
-        personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
             return "people/edit";
         }
