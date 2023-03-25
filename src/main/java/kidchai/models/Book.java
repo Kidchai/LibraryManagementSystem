@@ -1,7 +1,7 @@
 package kidchai.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -13,11 +13,11 @@ public class Book {
     private int id;
 
     @Column(name = "title")
-    @NotEmpty(message = "Title should be not empty")
+    @NotBlank(message = "Title should be not empty")
     private String title;
 
     @Column(name = "author")
-    @NotEmpty(message = "Author should be not empty")
+    @NotBlank(message = "Author should be not empty")
     private String author;
 
     @Column(name = "year")
