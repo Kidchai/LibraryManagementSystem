@@ -1,8 +1,7 @@
 package kidchai.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Entity
@@ -17,6 +16,8 @@ public class Person {
     private String name;
     @Column(name = "birth_year")
     @NotNull(message = "Year of birth should be not empty")
+    @Min(value = 1900, message = "Year of birth should be greater than 1900")
+    @Max(value = 2023, message = "Year of birth should be less than 2023")
     private int birthYear;
 
     @OneToMany(mappedBy = "holder", fetch = FetchType.EAGER)
@@ -50,7 +51,7 @@ public class Person {
         return birthYear;
     }
 
-    public void setBirthYear(int birthYear) {
+    public void setBirthYear(Integer birthYear) {
         this.birthYear = birthYear;
     }
 
