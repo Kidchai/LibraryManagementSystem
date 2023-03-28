@@ -45,4 +45,15 @@ public class BooksService {
     public void delete(int id) {
         booksRepository.deleteById(id);
     }
+
+    @Transactional
+    public void release(int id) {
+        Optional<Book> optionalBook = booksRepository.findById(id);
+        if (optionalBook.isEmpty()) {
+            return;
+        }
+        Book targetBook = optionalBook.get();
+        targetBook.setHolder(null);
+        booksRepository.save(targetBook);
+    }
 }
