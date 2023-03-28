@@ -1,11 +1,9 @@
 package kidchai.dao;
 
-import kidchai.models.Book;
 import kidchai.models.Person;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
