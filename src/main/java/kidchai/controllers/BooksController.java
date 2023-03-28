@@ -1,7 +1,6 @@
 package kidchai.controllers;
 
 import kidchai.dao.BookDao;
-import kidchai.dao.PersonDao;
 import kidchai.models.Book;
 import kidchai.models.Person;
 import org.springframework.stereotype.Controller;
@@ -16,11 +15,9 @@ import javax.validation.Valid;
 public class BooksController {
 
     private final BookDao bookDao;
-    private final PersonDao personDao;
 
-    public BooksController(BookDao bookDao, PersonDao personDao) {
+    public BooksController(BookDao bookDao) {
         this.bookDao = bookDao;
-        this.personDao = personDao;
     }
 
     @GetMapping()
@@ -34,11 +31,11 @@ public class BooksController {
         Book book = bookDao.show(id);
         model.addAttribute("book", book);
         Person holder = book.getHolder();
-        if (holder == null) {
-            model.addAttribute("people", personDao.index());
-        } else {
-            model.addAttribute("holder", holder);
-        }
+//        if (holder == null) {
+//            model.addAttribute("people", personDao.index());
+//        } else {
+//            model.addAttribute("holder", holder);
+//        }
         return "books/show";
     }
 
