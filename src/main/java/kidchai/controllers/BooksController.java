@@ -3,6 +3,7 @@ package kidchai.controllers;
 import kidchai.models.Book;
 import kidchai.models.Person;
 import kidchai.services.BooksService;
+import kidchai.services.PeopleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,9 +16,11 @@ import javax.validation.Valid;
 public class BooksController {
 
     private final BooksService booksService;
+    private final PeopleService peopleService;
 
-    public BooksController (BooksService booksService) {
+    public BooksController (BooksService booksService, PeopleService peopleService) {
         this.booksService = booksService;
+        this.peopleService = peopleService;
     }
 
     @GetMapping()
@@ -31,11 +34,11 @@ public class BooksController {
         Book book = booksService.findOne(id);
         model.addAttribute("book", book);
         Person holder = book.getHolder();
-//        if (holder == null) {
-//            model.addAttribute("people", booksService.findAll());
-//        } else {
-//            model.addAttribute("holder", holder);
-//        }
+        if (holder == null) {
+            model.addAttribute("people", peopleService.findAll());
+        } else {
+            model.addAttribute("holder", holder);
+        }
         return "books/show";
     }
 
