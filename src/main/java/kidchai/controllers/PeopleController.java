@@ -1,6 +1,7 @@
 package kidchai.controllers;
 
 import kidchai.dao.PersonDao;
+import kidchai.models.Book;
 import kidchai.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/people")
@@ -29,12 +31,13 @@ public class PeopleController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         Person person = personDao.show(id);
+        List<Book> books = person.getBooks();
         model.addAttribute("person", person);
-        model.addAttribute("books", person.getBooks());
+        model.addAttribute("books", books);
         if (person.getBooks().isEmpty()) {
             model.addAttribute("books", null);
         } else {
-            model.addAttribute("books", person.getBooks());
+            model.addAttribute("books", books);
         }
         return "people/show";
     }

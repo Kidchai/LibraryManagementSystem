@@ -2,6 +2,7 @@ package kidchai.dao;
 
 import kidchai.models.Book;
 import kidchai.models.Person;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -29,6 +30,8 @@ public class PersonDao {
     @Transactional(readOnly = true)
     public Person show(int id) {
         Session session = sessionFactory.getCurrentSession();
+        Person person = session.get(Person.class, id);
+        Hibernate.initialize(person.getBooks());
         return session.get(Person.class, id);
     }
 
