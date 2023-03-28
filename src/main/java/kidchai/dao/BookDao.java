@@ -53,15 +53,6 @@ public class BookDao {
         session.remove(session.get(Book.class, id));
     }
 
-//    @Transactional(readOnly = true)
-//    public Optional<Person> getHolder(int id) {
-//        Session session = sessionFactory.getCurrentSession();
-//        return session.createQuery("select p from Book b join Person p on p.id=b.personId where b.id=:id", Person.class)
-//                .setParameter("id", id)
-//                .getResultList()
-//                .stream().findAny();
-//    }
-
     @Transactional
     public void release(int id) {
         Session session = sessionFactory.getCurrentSession();
