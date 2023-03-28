@@ -7,9 +7,10 @@ The system empowers librarians to perform various tasks, including creating, edi
 
 ---
 
-I created three distinct versions of the app with identical functionality, each utilizing a different library as follows:
+I created three distinct versions of the app with similar functionality, each utilizing a different library as follows:
 
 - [Spring MVC + JDBC](https://github.com/Kidchai/LibraryManagementSystem/tree/Spring_MVC+JDBC)
 - [Spring MVC + Hibernate](https://github.com/Kidchai/LibraryManagementSystem/tree/Spring_MVC+Hibernate)
+- [Spring MVC + Hibernate + Spring Data JPA](https://github.com/Kidchai/LibraryManagementSystem/tree/Spring_MVC+Hibernate+Spring_Data_JPA)
 
 other technologies: Java, PostgreSQL, Thymeleaf, HTML
