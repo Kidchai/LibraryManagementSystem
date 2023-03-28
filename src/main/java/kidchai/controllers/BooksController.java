@@ -85,9 +85,9 @@ public class BooksController {
         return "redirect:/books/" + id;
     }
 
-//    @PatchMapping("/{id}/assign")
-//    public String assign(@PathVariable("id") int id, @ModelAttribute("person") Person person) {
-//        bookDao.assign(id, person);
-//        return "redirect:/books/" + id;
-//    }
+    @PatchMapping("/{id}/assign")
+    public String assign(@PathVariable("id") int id, @ModelAttribute("person") Person person) {
+        booksService.assign(id, person);
+        return "redirect:/books/" + id;
+    }
 }
