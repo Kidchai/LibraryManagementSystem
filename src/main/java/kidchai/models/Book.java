@@ -3,6 +3,7 @@ package kidchai.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Entity
 @Table(name = "books")
@@ -27,6 +28,10 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person holder;
+
+    @Column(name = "taken_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date takenAt;
 
     public Person getHolder() {
         return holder;
@@ -75,5 +80,13 @@ public class Book {
 
     public void setYear(int birthYear) {
         this.year = birthYear;
+    }
+
+    public Date getTakenAt() {
+        return takenAt;
+    }
+
+    public void setTakenAt(Date takenAt) {
+        this.takenAt = takenAt;
     }
 }

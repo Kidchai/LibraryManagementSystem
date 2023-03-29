@@ -3,11 +3,11 @@ package kidchai.services;
 import kidchai.models.Book;
 import kidchai.models.Person;
 import kidchai.repositories.BooksRepository;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,6 +66,8 @@ public class BooksService {
         }
         Book targetBook = optionalBook.get();
         targetBook.setHolder(person);
+        Date today = new Date();
+        targetBook.setTakenAt(today);
         booksRepository.save(targetBook);
     }
 }
