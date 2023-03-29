@@ -1,9 +1,9 @@
 INSERT INTO people (name, birth_year)
-VALUES ('Andrew Finch', 1976);
+VALUES ('Andrew Finch', '1990-12-08');
 INSERT INTO people (name, birth_year)
-VALUES ('Lindsey Garcia', 1988);
+VALUES ('Lindsey Garcia', '1976-03-05');
 INSERT INTO people (name, birth_year)
-VALUES ('Olivia Jones', 1997);
+VALUES ('Olivia Jones', '2003-08-21');
 
 INSERT INTO books (person_id, title, author, year)
 VALUES (2, 'To Kill a Mockingbird', 'Harper Lee', 1960);

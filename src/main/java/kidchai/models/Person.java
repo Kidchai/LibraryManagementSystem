@@ -1,7 +1,11 @@
 package kidchai.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,10 +21,9 @@ public class Person {
     private String name;
 
     @Column(name = "birth_year")
-    @NotNull(message = "Year of birth should be not empty")
-    @Min(value = 1900, message = "Year of birth should be greater than 1900")
-    @Max(value = 2023, message = "Year of birth should be less than 2023")
-    private int birthYear;
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    private Date birthYear;
 
     @OneToMany(mappedBy = "holder")
     private List<Book> books;
@@ -28,7 +31,7 @@ public class Person {
     public Person() {
     }
 
-    public Person(String name, int birthYear) {
+    public Person(String name, Date birthYear) {
         this.name = name;
         this.birthYear = birthYear;
     }
@@ -49,11 +52,11 @@ public class Person {
         this.name = name;
     }
 
-    public int getBirthYear() {
+    public Date getBirthYear() {
         return birthYear;
     }
 
-    public void setBirthYear(Integer birthYear) {
+    public void setBirthYear(Date birthYear) {
         this.birthYear = birthYear;
     }
 
@@ -63,5 +66,10 @@ public class Person {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    public String getFormattedTakenAt() {
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        return formatter.format(birthYear);
     }
 }

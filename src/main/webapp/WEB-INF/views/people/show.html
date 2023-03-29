@@ -5,7 +5,7 @@
     <title>Person</title>
 </head>
 <body>
-<p th:text="${person.getName() + ', ' + person.getBirthYear()}">person</p>
+<p th:text="${person.getName() + ', ' + person.getFormattedTakenAt()}">person</p>
 <p th:if="${books == null}">This person doesn't keep any books.</p>
 <table>
     <tr th:if="${books != null}">
