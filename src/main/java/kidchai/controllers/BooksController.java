@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/books")
@@ -18,14 +19,19 @@ public class BooksController {
     private final BooksService booksService;
     private final PeopleService peopleService;
 
-    public BooksController (BooksService booksService, PeopleService peopleService) {
+    public BooksController(BooksService booksService, PeopleService peopleService) {
         this.booksService = booksService;
         this.peopleService = peopleService;
     }
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", booksService.findAll());
+    public String index(Model model,
+                        @RequestParam(value = "page", required = false) Integer page,
+                        @RequestParam(value = "books_per_page", required = false) Integer booksPerPage) {
+        List<Book> books = (page == null && booksPerPage == null) ?
+                booksService.findAll() :
+                booksService.findAll(page, booksPerPage);
+        model.addAttribute("books", books);
         return "books/index";
     }
 
