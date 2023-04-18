@@ -5,6 +5,7 @@ import kidchai.models.Person;
 import kidchai.repositories.BooksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,12 +24,16 @@ public class BooksService {
         this.booksRepository = booksRepository;
     }
 
-    public List<Book> findAll() {
-        return booksRepository.findAll();
+    public List<Book> findAll(boolean isSortedByYear) {
+        return (isSortedByYear) ?
+                booksRepository.findAll(Sort.by("year")) :
+                booksRepository.findAll();
     }
 
-    public List<Book> findAll(Integer page, Integer booksPerPage) {
-        return booksRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
+    public List<Book> findAllWithPagination(Integer page, Integer booksPerPage, boolean isSortedByYear) {
+        return (isSortedByYear) ?
+                booksRepository.findAll(PageRequest.of(page, booksPerPage, Sort.by("year"))).getContent() :
+                booksRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
     }
 
     public Book findOne(int id) {
