@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+</head>
+<body>
+<h3>What book are you looking for?</h3>
+<form th:action="@{/search}" method="get">
+    <input type="text" placeholder="Harry Potter and the Philosopher's Stone" size="100" >
+    <button type="submit" class="btn btn-info" >Search</button>
+</form>
+</body>
+</html>
