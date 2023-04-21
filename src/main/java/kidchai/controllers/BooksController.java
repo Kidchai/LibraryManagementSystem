@@ -105,11 +105,10 @@ public class BooksController {
 
     @GetMapping("/search/result")
     public String search(Model model, @ModelAttribute("title") String title) {
-        System.out.println("Started to search books!");
         List<Book> books = booksService.findByTitle(title);
         model.addAttribute("books", books);
-        if (books == null) {
-            model.addAttribute("bookNotFound", null);
+        if (books.isEmpty()) {
+            model.addAttribute("bookNotFound", "");
         } else {
             model.addAttribute("books", books);
         }
