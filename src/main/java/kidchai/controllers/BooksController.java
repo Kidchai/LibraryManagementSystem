@@ -97,4 +97,22 @@ public class BooksController {
         booksService.assign(id, person);
         return "redirect:/books/" + id;
     }
+
+    @GetMapping("/search")
+    public String search() {
+        return "books/search";
+    }
+
+    @GetMapping("/search/result")
+    public String search(Model model, @ModelAttribute("title") String title) {
+        System.out.println("Started to search books!");
+        List<Book> books = booksService.findByTitle(title);
+        model.addAttribute("books", books);
+        if (books == null) {
+            model.addAttribute("bookNotFound", null);
+        } else {
+            model.addAttribute("books", books);
+        }
+        return "books/search/result";
+    }
 }

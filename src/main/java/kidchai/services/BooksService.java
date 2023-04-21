@@ -41,6 +41,11 @@ public class BooksService {
         return book.orElse(null);
     }
 
+    public List<Book> findByTitle(String title) {
+        Optional<List<Book>> books = booksRepository.findAllByTitleStartingWith(title);
+        return books.orElse(null);
+    }
+
     @Transactional
     public void save(Book book) {
         booksRepository.save(book);
