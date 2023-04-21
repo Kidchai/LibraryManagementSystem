@@ -99,12 +99,10 @@ public class BooksController {
     }
 
     @GetMapping("/search")
-    public String search() {
-        return "books/search";
-    }
-
-    @GetMapping("/search/result")
     public String search(Model model, @ModelAttribute("title") String title) {
+        if (title.isEmpty()) {
+            return "books/search";
+        }
         List<Book> books = booksService.findByTitle(title);
         model.addAttribute("books", books);
         if (books.isEmpty()) {
@@ -112,6 +110,6 @@ public class BooksController {
         } else {
             model.addAttribute("books", books);
         }
-        return "books/search/result";
+        return "books/search";
     }
 }
