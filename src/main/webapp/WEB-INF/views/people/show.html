@@ -10,15 +10,11 @@
 <div th:if="${books != null}">
     <p><strong>Books</strong></p>
     <div th:each="book : ${books}">
-        <div th:if="${book.isOverdue()}">
-            <p style="color:#E7320B"
+
+            <p th:style="${book.isOverdue()} ? 'color: #E7320B' : 'color: black'"
                th:text="'- ' + ${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">
                 book</p>
-        </div>
 
-        <div th:if="${!book.isOverdue()}">
-            <p th:text="'- ' + ${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</p>
-        </div>
     </div>
 </div>
 <hr/>
