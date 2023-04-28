@@ -89,15 +89,4 @@ public class Book {
     public void setTakenAt(Date takenAt) {
         this.takenAt = takenAt;
     }
-
-    public boolean isOverdue() {
-        if (takenAt == null) {
-            return false;
-        }
-        Date today = new Date();
-        long msTimeDistance = today.getTime() - takenAt.getTime();
-        long msDay = 24 * 60 * 60 * 1000;
-        int dayCount = (int) (msTimeDistance/msDay);
-        return dayCount > 30;
-    }
 }
