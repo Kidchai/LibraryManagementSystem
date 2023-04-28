@@ -7,14 +7,20 @@
 <body>
 <p th:text="${person.getName() + ', ' + person.getFormattedTakenAt()}">person</p>
 <p th:if="${books == null}">This person doesn't keep any books.</p>
-<table>
-    <tr th:if="${books != null}">
-        <p><strong>Books</strong></p>
-    <tr th:each="book : ${books}">
-        <p th:text="'- ' + ${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</p>
-    </tr>
-    </tr>
-</table>
+<div th:if="${books != null}">
+    <p><strong>Books</strong></p>
+    <div th:each="book : ${books}">
+        <div th:if="${book.isOverdue()}">
+            <p style="color:#E7320B"
+               th:text="'- ' + ${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">
+                book</p>
+        </div>
+
+        <div th:if="${!book.isOverdue()}">
+            <p th:text="'- ' + ${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</p>
+        </div>
+    </div>
+</div>
 <hr/>
 <form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
     <input type="submit" value="Edit"/>
