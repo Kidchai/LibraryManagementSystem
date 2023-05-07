@@ -17,6 +17,10 @@ This version includes some new features that I believe will make managing librar
 - Automatic tracking of borrowed books, with a 30-day return policy.
 - Overdue books are highlighted in red in the customer's lists.
 
+### Look! It's running!
+
+![Library Management System](forReadme/library1.gif)
+
 ### What about other versions?
 
 If you're interested in seeing how my application has evolved over time, you can check out the other branches, which include:
