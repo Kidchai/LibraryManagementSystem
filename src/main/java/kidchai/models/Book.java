@@ -1,6 +1,8 @@
 package kidchai.models;
 
-import javax.persistence.*;
+//import javax.persistence.*;
+import jakarta.persistence.*;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;

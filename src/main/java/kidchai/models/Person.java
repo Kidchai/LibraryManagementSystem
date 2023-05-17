@@ -1,8 +1,9 @@
 package kidchai.models;
 
+import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+//import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
