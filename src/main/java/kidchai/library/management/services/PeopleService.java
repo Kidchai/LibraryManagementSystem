@@ -1,7 +1,7 @@
-package kidchai.services;
+package kidchai.library.management.services;
 
-import kidchai.models.Person;
-import kidchai.repositories.PeopleRepository;
+import kidchai.library.management.models.Person;
+import kidchai.library.management.repositories.PeopleRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

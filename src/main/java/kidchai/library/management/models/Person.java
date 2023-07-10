@@ -1,4 +1,4 @@
-package kidchai.models;
+package kidchai.library.management.models;
 
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;

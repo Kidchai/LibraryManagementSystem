@@ -1,9 +1,9 @@
-package kidchai.controllers;
+package kidchai.library.management.controllers;
 
-import kidchai.models.Book;
-import kidchai.models.Person;
-import kidchai.services.BooksService;
-import kidchai.services.PeopleService;
+import kidchai.library.management.models.Book;
+import kidchai.library.management.models.Person;
+import kidchai.library.management.services.BooksService;
+import kidchai.library.management.services.PeopleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

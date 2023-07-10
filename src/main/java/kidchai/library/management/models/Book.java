@@ -1,4 +1,4 @@
-package kidchai.models;
+package kidchai.library.management.models;
 
 //import javax.persistence.*;
 import jakarta.persistence.*;
