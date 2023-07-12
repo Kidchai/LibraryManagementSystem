@@ -1,6 +1,5 @@
 package kidchai.library.management.models;
 
-//import javax.persistence.*;
 import jakarta.persistence.*;
 
 import javax.validation.constraints.NotBlank;
