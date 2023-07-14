@@ -27,7 +27,7 @@ public class PeopleService {
 
     public Person findOne(int id) {
         Optional<Person> person = peopleRepository.findById(id);
-        Hibernate.initialize(person.get().getBooks());
+        person.ifPresent(p -> Hibernate.initialize(p.getBooks()));
         return person.orElse(null);
     }
 
