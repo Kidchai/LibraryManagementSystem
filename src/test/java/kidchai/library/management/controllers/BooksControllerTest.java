@@ -3,7 +3,6 @@ package kidchai.library.management.controllers;
 import kidchai.library.management.models.Book;
 import kidchai.library.management.models.Person;
 import kidchai.library.management.services.BooksService;
-import kidchai.library.management.services.PeopleService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,9 +23,6 @@ class BooksControllerTest {
 
     @MockBean
     private BooksService booksService;
-
-    @MockBean
-    private PeopleService peopleService;
 
     @Autowired
     BooksControllerTest(MockMvc mockMvc) {

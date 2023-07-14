@@ -34,7 +34,6 @@ public class PeopleController {
         Person person = peopleService.findOne(id);
         List<Book> books = person.getBooks();
         model.addAttribute("person", person);
-        model.addAttribute("books", books);
         if (person.getBooks().isEmpty()) {
             model.addAttribute("books", null);
         } else {
