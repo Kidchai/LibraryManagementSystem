@@ -71,6 +71,12 @@ $ mvn spring-boot:run
 
 Now you need just open your web browser and navigate to http://localhost:8080 (or whatever port you have set in your application properties).
 
+If you want to run unit tests, run the:
+
+```bash
+$ mvn test
+```
+
 ## What about other versions?
 
 If you're interested in seeing how my application has evolved over time, you can check out the other branches, which include:
