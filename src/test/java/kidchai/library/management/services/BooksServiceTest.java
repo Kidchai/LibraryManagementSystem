@@ -100,7 +100,7 @@ class BooksServiceTest {
     }
 
     @Test
-    void save() {
+    void testSave() {
         Book book = new Book();
         when(booksRepository.save(any(Book.class))).thenReturn(book);
 
@@ -110,7 +110,7 @@ class BooksServiceTest {
     }
 
     @Test
-    void update() {
+    void testUpdate() {
         Book book = new Book();
         book.setId(1);
         when(booksRepository.save(any(Book.class))).thenReturn(book);
