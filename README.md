@@ -25,6 +25,16 @@ This version includes some new features that I believe will make managing librar
 
 **Requirements**
 
+- Docker
+
+If you don't have Docker, you can download it [here](https://www.docker.com/products/docker-desktop).
+
+<details>
+  <summary>In case you don't want to use Docker, check out instructions under this spoiler.
+</summary>
+
+**Requirements**
+
 - JDK 17 or newer
 - Maven
 - PostgreSQL
@@ -50,12 +60,12 @@ CREATE DATABASE your_database_name;
 Navigate to the *application.properties* file located in the *src/main/resources* directory and update the following properties:
 
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/your_database
-spring.datasource.username=your_username
-spring.datasource.password=your_password
+spring.datasource.url=jdbc:postgresql://localhost:5432/library-db
+spring.datasource.username=postgres
+spring.datasource.password=postgres
 ```
 
-Replace *your_database*, *your_username*, and *your_password* with the database name, username, and password.
+Replace *library-db*, *postgres*, and *postgres* with the database name, username, and password.
 
 **4. Install dependencies and build the project**
 
@@ -69,13 +79,29 @@ $ mvn clean install
 $ mvn spring-boot:run
 ```
 
-Now you need just open your web browser and navigate to http://localhost:8080 (or whatever port you have set in your application properties).
+Now you need just open your web browser and navigate to http://localhost:8080
 
 If you want to run unit tests, run the:
 
 ```bash
 $ mvn test
 ```
+</details>
+
+**1. Clone the repository and navigate to the project directory**
+
+```bash
+$ git clone https://github.com/Kidchai/library-management-system.git
+$ cd library-management-system
+```
+
+**2. Start the application and database using Docker**
+
+```bash
+$ docker-compose up
+```
+
+Now you need just open your web browser and navigate to http://localhost:8080
 
 ## What about other versions?
 
