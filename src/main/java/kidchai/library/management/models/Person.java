@@ -1,5 +1,7 @@
 package kidchai.library.management.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,6 +29,9 @@ public class Person {
     private Date birthYear;
 
     @OneToMany(mappedBy = "holder")
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     private List<Book> books;
 
     public Person() {

@@ -4,7 +4,6 @@ import kidchai.library.management.models.Book;
 import kidchai.library.management.models.Person;
 import kidchai.library.management.services.BooksService;
 import kidchai.library.management.services.PeopleService;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@Controller
-@RequestMapping("/books")
+@RestController
+@RequestMapping("/api/books")
 public class BooksController {
 
     private final BooksService booksService;
@@ -25,28 +24,17 @@ public class BooksController {
     }
 
     @GetMapping()
-    public String index(Model model,
-                        @RequestParam(value = "page", required = false) Integer page,
-                        @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
-                        @RequestParam(value = "sort_by_year", required = false) boolean isSortedByYear) {
-        List<Book> books = (page == null && booksPerPage == null) ?
+    public List<Book> index(@RequestParam(value = "page", required = false) Integer page,
+                            @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
+                            @RequestParam(value = "sort_by_year", required = false) boolean isSortedByYear) {
+        return (page == null && booksPerPage == null) ?
                 booksService.findAll(isSortedByYear) :
                 booksService.findAllWithPagination(page, booksPerPage, isSortedByYear);
-        model.addAttribute("books", books);
-        return "books/index";
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
-        Book book = booksService.findOne(id);
-        model.addAttribute("book", book);
-        Person holder = book.getHolder();
-        if (holder == null) {
-            model.addAttribute("people", peopleService.findAll());
-        } else {
-            model.addAttribute("holder", holder);
-        }
-        return "books/show";
+    public Book show(@PathVariable("id") int id) {
+        return booksService.findOne(id);
     }
 
     @GetMapping("/new")
