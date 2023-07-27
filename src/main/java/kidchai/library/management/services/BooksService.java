@@ -3,6 +3,7 @@ package kidchai.library.management.services;
 import kidchai.library.management.models.Book;
 import kidchai.library.management.models.Person;
 import kidchai.library.management.repositories.BooksRepository;
+import kidchai.library.management.util.BookNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -38,7 +39,7 @@ public class BooksService {
 
     public Book findOne(int id) {
         Optional<Book> book = booksRepository.findById(id);
-        return book.orElse(null);
+        return book.orElseThrow(BookNotFoundException::new);
     }
 
     public List<Book> findByTitle(String title) {

@@ -4,6 +4,10 @@ import kidchai.library.management.models.Book;
 import kidchai.library.management.models.Person;
 import kidchai.library.management.services.BooksService;
 import kidchai.library.management.services.PeopleService;
+import kidchai.library.management.util.BookErrorResponse;
+import kidchai.library.management.util.BookNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +39,15 @@ public class BooksController {
     @GetMapping("/{id}")
     public Book show(@PathVariable("id") int id) {
         return booksService.findOne(id);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<BookErrorResponse> handleException(BookNotFoundException exception) {
+        BookErrorResponse error = new BookErrorResponse(
+                "Book with this id not found",
+                System.currentTimeMillis()
+        );
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/new")
