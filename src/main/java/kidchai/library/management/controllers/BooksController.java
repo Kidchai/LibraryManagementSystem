@@ -1,10 +1,11 @@
 package kidchai.library.management.controllers;
 
+import jakarta.validation.Valid;
 import kidchai.library.management.models.Book;
 import kidchai.library.management.models.Person;
 import kidchai.library.management.services.BooksService;
-import kidchai.library.management.services.PeopleService;
 import kidchai.library.management.util.BookErrorResponse;
+import kidchai.library.management.util.BookNotCreatedException;
 import kidchai.library.management.util.BookNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,11 +20,9 @@ import java.util.List;
 public class BooksController {
 
     private final BooksService booksService;
-    private final PeopleService peopleService;
 
-    public BooksController(BooksService booksService, PeopleService peopleService) {
+    public BooksController(BooksService booksService) {
         this.booksService = booksService;
-        this.peopleService = peopleService;
     }
 
     @GetMapping()
@@ -41,28 +39,27 @@ public class BooksController {
         return booksService.findOne(id);
     }
 
-    @ExceptionHandler
-    private ResponseEntity<BookErrorResponse> handleException(BookNotFoundException exception) {
-        BookErrorResponse error = new BookErrorResponse(
-                "Book with this id not found",
-                System.currentTimeMillis()
-        );
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
     @GetMapping("/new")
     public String newBook(@ModelAttribute("book") Book book) {
         return "books/new";
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("book") @Valid Book book,
-                         BindingResult bindingResult) {
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid Book book,
+                                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "books/new";
+            StringBuilder errors = new StringBuilder();
+            bindingResult.getFieldErrors()
+                    .forEach(error -> errors
+                            .append(error.getField())
+                            .append(" - ")
+                            .append(error.getDefaultMessage())
+                            .append("\n"));
+
+            throw new BookNotCreatedException(errors.toString());
         }
         booksService.save(book);
-        return "redirect:/books";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/{id}/edit")
@@ -112,5 +109,20 @@ public class BooksController {
             model.addAttribute("books", books);
         }
         return "books/search";
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<BookErrorResponse> handleException(BookNotFoundException exception) {
+        BookErrorResponse error = new BookErrorResponse(
+                "Book with this id not found",
+                System.currentTimeMillis()
+        );
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<BookErrorResponse> handleException(BookNotCreatedException exception) {
+        BookErrorResponse error = new BookErrorResponse(exception.getMessage(), System.currentTimeMillis());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }

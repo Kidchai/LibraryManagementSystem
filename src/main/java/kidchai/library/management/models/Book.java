@@ -3,9 +3,9 @@ package kidchai.library.management.models;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -17,11 +17,11 @@ public class Book {
     private int id;
 
     @Column(name = "title")
-    @NotBlank(message = "Title should be not empty")
+    @NotEmpty(message = "Title should be not empty")
     private String title;
 
     @Column(name = "author")
-    @NotBlank(message = "Author should be not empty")
+    @NotEmpty(message = "Author should be not empty")
     private String author;
 
     @Column(name = "year")
