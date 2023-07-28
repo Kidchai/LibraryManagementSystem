@@ -1,4 +1,4 @@
-package kidchai.library.management.util;
+package kidchai.library.management.util.book;
 
 public class BookErrorResponse {
     private String message;

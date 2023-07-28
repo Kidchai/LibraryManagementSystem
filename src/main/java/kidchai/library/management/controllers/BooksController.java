@@ -4,10 +4,10 @@ import jakarta.validation.Valid;
 import kidchai.library.management.models.Book;
 import kidchai.library.management.models.Person;
 import kidchai.library.management.services.BooksService;
-import kidchai.library.management.util.BookErrorResponse;
-import kidchai.library.management.util.BookNotCreatedException;
-import kidchai.library.management.util.BookNotFoundException;
-import kidchai.library.management.util.BookNotUpdatedException;
+import kidchai.library.management.util.book.BookErrorResponse;
+import kidchai.library.management.util.book.BookNotCreatedException;
+import kidchai.library.management.util.book.BookNotFoundException;
+import kidchai.library.management.util.book.BookNotUpdatedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -27,8 +27,12 @@ public class BooksController {
 
     @GetMapping()
     public ResponseEntity<List<Book>> index(@RequestParam(value = "page", required = false) Integer page,
+                                            @RequestParam(value = "title", required = false) String title,
                                             @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
                                             @RequestParam(value = "sort_by_year", required = false) boolean isSortedByYear) {
+        if (title != null)
+            return ResponseEntity.ok(booksService.findByTitle(title));
+
         List<Book> books = (page == null && booksPerPage == null) ?
                 booksService.findAll(isSortedByYear) :
                 booksService.findAllWithPagination(page, booksPerPage, isSortedByYear);
@@ -40,24 +44,12 @@ public class BooksController {
         return ResponseEntity.ok(booksService.findOne(id));
     }
 
-    @GetMapping("/new")
-    public String newBook(@ModelAttribute("book") Book book) {
-        return "books/new";
-    }
-
     @PostMapping()
     public ResponseEntity<Book> create(@RequestBody @Valid Book book,
                                        BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            StringBuilder errors = new StringBuilder();
-            bindingResult.getFieldErrors()
-                    .forEach(error -> errors
-                            .append(error.getField())
-                            .append(" - ")
-                            .append(error.getDefaultMessage())
-                            .append("\n"));
-
-            throw new BookNotCreatedException(errors.toString());
+            String errors = getExceptionMessage(bindingResult);
+            throw new BookNotCreatedException(errors);
         }
         return ResponseEntity.ok(booksService.save(book));
     }
@@ -66,15 +58,8 @@ public class BooksController {
     public ResponseEntity<Book> update(@RequestBody @Valid Book book, BindingResult bindingResult,
                                        @PathVariable("id") int id) {
         if (bindingResult.hasErrors()) {
-            StringBuilder errors = new StringBuilder();
-            bindingResult.getFieldErrors()
-                    .forEach(error -> errors
-                            .append(error.getField())
-                            .append(" - ")
-                            .append(error.getDefaultMessage())
-                            .append("\n"));
-
-            throw new BookNotUpdatedException(errors.toString());
+            String errors = getExceptionMessage(bindingResult);
+            throw new BookNotUpdatedException(errors);
         }
         return ResponseEntity.ok(booksService.update(id, book));
     }
@@ -96,13 +81,6 @@ public class BooksController {
 
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<Book>> search(@RequestBody String title) {
-        if (title.isEmpty())
-            index(null, null, false);
-        return ResponseEntity.ok(booksService.findByTitle(title));
-    }
-
     @ExceptionHandler
     private ResponseEntity<BookErrorResponse> handleException(BookNotFoundException exception) {
         BookErrorResponse error = new BookErrorResponse(
@@ -121,5 +99,14 @@ public class BooksController {
     private ResponseEntity<BookErrorResponse> handleException(BookNotUpdatedException exception) {
         BookErrorResponse error = new BookErrorResponse(exception.getMessage(), System.currentTimeMillis());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    private String getExceptionMessage(BindingResult bindingResult) {
+        StringBuilder errors = new StringBuilder();
+        bindingResult.getFieldErrors()
+                .forEach(error -> errors
+                        .append(error.getField()).append(" - ")
+                        .append(error.getDefaultMessage()).append("\n"));
+        return errors.toString();
     }
 }

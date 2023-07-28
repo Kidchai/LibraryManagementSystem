@@ -3,7 +3,7 @@ package kidchai.library.management.services;
 import kidchai.library.management.models.Book;
 import kidchai.library.management.models.Person;
 import kidchai.library.management.repositories.BooksRepository;
-import kidchai.library.management.util.BookNotFoundException;
+import kidchai.library.management.util.book.BookNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
