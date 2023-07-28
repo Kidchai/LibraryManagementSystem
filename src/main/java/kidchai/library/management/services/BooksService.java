@@ -48,14 +48,16 @@ public class BooksService {
     }
 
     @Transactional
-    public void save(Book book) {
+    public Book save(Book book) {
         booksRepository.save(book);
+        return book;
     }
 
     @Transactional
-    public void update(int id, Book updatedBook) {
+    public Book update(int id, Book updatedBook) {
         updatedBook.setId(id);
         booksRepository.save(updatedBook);
+        return updatedBook;
     }
 
     @Transactional
@@ -64,26 +66,25 @@ public class BooksService {
     }
 
     @Transactional
-    public void release(int id) {
+    public Book release(int id) {
         Optional<Book> optionalBook = booksRepository.findById(id);
-        if (optionalBook.isEmpty()) {
-            return;
-        }
+        if (optionalBook.isEmpty())
+            throw new BookNotFoundException();
         Book targetBook = optionalBook.get();
         targetBook.setHolder(null);
         booksRepository.save(targetBook);
+        return targetBook;
     }
 
     @Transactional
-    public void assign(int id, Person person) {
+    public Book assign(int id, Person person) {
         Optional<Book> optionalBook = booksRepository.findById(id);
-        if (optionalBook.isEmpty()) {
-            return;
-        }
+        if (optionalBook.isEmpty())
+            throw new BookNotFoundException();
         Book targetBook = optionalBook.get();
         targetBook.setHolder(person);
-        Date today = new Date();
-        targetBook.setTakenAt(today);
+        targetBook.setTakenAt(new Date());
         booksRepository.save(targetBook);
+        return targetBook;
     }
 }

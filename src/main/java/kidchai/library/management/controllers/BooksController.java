@@ -7,9 +7,9 @@ import kidchai.library.management.services.BooksService;
 import kidchai.library.management.util.BookErrorResponse;
 import kidchai.library.management.util.BookNotCreatedException;
 import kidchai.library.management.util.BookNotFoundException;
+import kidchai.library.management.util.BookNotUpdatedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,17 +26,18 @@ public class BooksController {
     }
 
     @GetMapping()
-    public List<Book> index(@RequestParam(value = "page", required = false) Integer page,
-                            @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
-                            @RequestParam(value = "sort_by_year", required = false) boolean isSortedByYear) {
-        return (page == null && booksPerPage == null) ?
+    public ResponseEntity<List<Book>> index(@RequestParam(value = "page", required = false) Integer page,
+                                            @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
+                                            @RequestParam(value = "sort_by_year", required = false) boolean isSortedByYear) {
+        List<Book> books = (page == null && booksPerPage == null) ?
                 booksService.findAll(isSortedByYear) :
                 booksService.findAllWithPagination(page, booksPerPage, isSortedByYear);
+        return ResponseEntity.ok(books);
     }
 
     @GetMapping("/{id}")
-    public Book show(@PathVariable("id") int id) {
-        return booksService.findOne(id);
+    public ResponseEntity<Book> show(@PathVariable("id") int id) {
+        return ResponseEntity.ok(booksService.findOne(id));
     }
 
     @GetMapping("/new")
@@ -45,8 +46,8 @@ public class BooksController {
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid Book book,
-                                             BindingResult bindingResult) {
+    public ResponseEntity<Book> create(@RequestBody @Valid Book book,
+                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder errors = new StringBuilder();
             bindingResult.getFieldErrors()
@@ -58,70 +59,66 @@ public class BooksController {
 
             throw new BookNotCreatedException(errors.toString());
         }
-        booksService.save(book);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("book", booksService.findOne(id));
-        return "books/edit";
+        return ResponseEntity.ok(booksService.save(book));
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("book") @Valid Book book,
-                         BindingResult bindingResult, @PathVariable("id") int id) {
+    public ResponseEntity<Book> update(@RequestBody @Valid Book book, BindingResult bindingResult,
+                                       @PathVariable("id") int id) {
         if (bindingResult.hasErrors()) {
-            return "books/edit";
+            StringBuilder errors = new StringBuilder();
+            bindingResult.getFieldErrors()
+                    .forEach(error -> errors
+                            .append(error.getField())
+                            .append(" - ")
+                            .append(error.getDefaultMessage())
+                            .append("\n"));
+
+            throw new BookNotUpdatedException(errors.toString());
         }
-        booksService.update(id, book);
-        return "redirect:/books";
+        return ResponseEntity.ok(booksService.update(id, book));
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
         booksService.delete(id);
-        return "redirect:/books";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PatchMapping("/{id}/release")
-    public String release(@PathVariable("id") int id) {
-        booksService.release(id);
-        return "redirect:/books/" + id;
+    public ResponseEntity<Book> release(@PathVariable("id") int id) {
+        return ResponseEntity.ok(booksService.release(id));
     }
 
     @PatchMapping("/{id}/assign")
-    public String assign(@PathVariable("id") int id, @ModelAttribute("person") Person person) {
-        booksService.assign(id, person);
-        return "redirect:/books/" + id;
+    public ResponseEntity<Book> assign(@PathVariable("id") int id, @RequestBody Person person) {
+        return ResponseEntity.ok(booksService.assign(id, person));
+
     }
 
     @GetMapping("/search")
-    public String search(Model model, @ModelAttribute("title") String title) {
-        if (title.isEmpty()) {
-            return "books/search";
-        }
-        List<Book> books = booksService.findByTitle(title);
-        model.addAttribute("books", books);
-        if (books.isEmpty()) {
-            model.addAttribute("bookNotFound", "");
-        } else {
-            model.addAttribute("books", books);
-        }
-        return "books/search";
+    public ResponseEntity<List<Book>> search(@RequestBody String title) {
+        if (title.isEmpty())
+            index(null, null, false);
+        return ResponseEntity.ok(booksService.findByTitle(title));
     }
 
     @ExceptionHandler
     private ResponseEntity<BookErrorResponse> handleException(BookNotFoundException exception) {
         BookErrorResponse error = new BookErrorResponse(
                 "Book with this id not found",
-                System.currentTimeMillis()
-        );
+                System.currentTimeMillis());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
     private ResponseEntity<BookErrorResponse> handleException(BookNotCreatedException exception) {
+        BookErrorResponse error = new BookErrorResponse(exception.getMessage(), System.currentTimeMillis());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<BookErrorResponse> handleException(BookNotUpdatedException exception) {
         BookErrorResponse error = new BookErrorResponse(exception.getMessage(), System.currentTimeMillis());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
