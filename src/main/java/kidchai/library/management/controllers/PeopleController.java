@@ -1,19 +1,22 @@
 package kidchai.library.management.controllers;
 
 import jakarta.validation.Valid;
-import kidchai.library.management.models.Book;
 import kidchai.library.management.models.Person;
 import kidchai.library.management.services.PeopleService;
+import kidchai.library.management.util.person.PersonErrorResponse;
+import kidchai.library.management.util.person.PersonNotCreatedException;
+import kidchai.library.management.util.person.PersonNotFoundException;
+import kidchai.library.management.util.person.PersonNotUpdatedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/people")
+@RestController
+@RequestMapping("/api/people")
 public class PeopleController {
 
     private final PeopleService peopleService;
@@ -24,58 +27,65 @@ public class PeopleController {
     }
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("people", peopleService.findAll());
-        return "people/index";
+    public ResponseEntity<List<Person>> index() {
+        return ResponseEntity.ok(peopleService.findAll());
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
-        Person person = peopleService.findOne(id);
-        List<Book> books = person.getBooks();
-        model.addAttribute("person", person);
-        if (person.getBooks().isEmpty()) {
-            model.addAttribute("books", null);
-        } else {
-            model.addAttribute("books", books);
-        }
-        return "people/show";
-    }
-
-    @GetMapping("/new")
-    public String newPerson(@ModelAttribute("person") Person person) {
-        return "people/new";
+    public ResponseEntity<Person> show(@PathVariable("id") int id) {
+        return ResponseEntity.ok(peopleService.findOne(id));
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("person") @Valid Person person,
-                         BindingResult bindingResult) {
+    public ResponseEntity<Person> create(@RequestBody @Valid Person person, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "people/new";
+            String errors = getExceptionMessage(bindingResult);
+            throw new PersonNotCreatedException(errors);
         }
-        peopleService.save(person);
-        return "redirect:/people";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", peopleService.findOne(id));
-        return "people/edit";
+        return ResponseEntity.ok(peopleService.save(person));
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("person") @Valid Person person,
-                         BindingResult bindingResult, @PathVariable("id") int id) {
+    public ResponseEntity<Person> update(@RequestBody @Valid Person person, BindingResult bindingResult, @PathVariable("id") int id) {
         if (bindingResult.hasErrors()) {
-            return "people/edit";
+            String errors = getExceptionMessage(bindingResult);
+            throw new PersonNotUpdatedException(errors);
         }
-        peopleService.update(id, person);
-        return "redirect:/people";
+        return ResponseEntity.ok(peopleService.update(id, person));
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
         peopleService.delete(id);
-        return "redirect:/people";
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<PersonErrorResponse> handleException(PersonNotFoundException exception) {
+        PersonErrorResponse error = new PersonErrorResponse(
+                "Person with this id not found",
+                System.currentTimeMillis());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<PersonErrorResponse> handleException(PersonNotCreatedException exception) {
+        PersonErrorResponse error = new PersonErrorResponse(exception.getMessage(), System.currentTimeMillis());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<PersonErrorResponse> handleException(PersonNotUpdatedException exception) {
+        PersonErrorResponse error = new PersonErrorResponse(exception.getMessage(), System.currentTimeMillis());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    private String getExceptionMessage(BindingResult bindingResult) {
+        StringBuilder errors = new StringBuilder();
+        bindingResult.getFieldErrors()
+                .forEach(error -> errors
+                        .append(error.getField()).append(" - ")
+                        .append(error.getDefaultMessage()).append("\n"));
+        return errors.toString();
     }
 }

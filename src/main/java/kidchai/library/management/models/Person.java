@@ -3,11 +3,9 @@ package kidchai.library.management.models;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
-//import javax.persistence.*;
-//import javax.validation.constraints.*;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +18,7 @@ public class Person {
     private int id;
 
     @Column(name = "name")
-//    @NotBlank(message = "Name should be not empty")
+    @NotEmpty(message = "Name should be not empty")
     private String name;
 
     @Column(name = "birth_year")
@@ -72,10 +70,5 @@ public class Person {
 
     public void setBooks(List<Book> books) {
         this.books = books;
-    }
-
-    public String getFormattedTakenAt() {
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        return formatter.format(birthYear);
     }
 }

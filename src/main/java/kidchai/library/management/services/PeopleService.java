@@ -2,7 +2,7 @@ package kidchai.library.management.services;
 
 import kidchai.library.management.models.Person;
 import kidchai.library.management.repositories.PeopleRepository;
-import org.hibernate.Hibernate;
+import kidchai.library.management.util.person.PersonNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,19 +27,20 @@ public class PeopleService {
 
     public Person findOne(int id) {
         Optional<Person> person = peopleRepository.findById(id);
-        person.ifPresent(p -> Hibernate.initialize(p.getBooks()));
-        return person.orElse(null);
+        return person.orElseThrow(PersonNotFoundException::new);
     }
 
     @Transactional
-    public void save(Person person) {
+    public Person save(Person person) {
         peopleRepository.save(person);
+        return person;
     }
 
     @Transactional
-    public void update(int id, Person updatedPerson) {
+    public Person update(int id, Person updatedPerson) {
         updatedPerson.setId(id);
         peopleRepository.save(updatedPerson);
+        return updatedPerson;
     }
 
     @Transactional
