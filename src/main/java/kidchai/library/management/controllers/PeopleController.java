@@ -1,8 +1,10 @@
 package kidchai.library.management.controllers;
 
 import jakarta.validation.Valid;
+import kidchai.library.management.dto.person.PersonDTOForPerson;
 import kidchai.library.management.models.Person;
 import kidchai.library.management.services.PeopleService;
+import kidchai.library.management.services.mappers.PersonMapperService;
 import kidchai.library.management.util.person.PersonErrorResponse;
 import kidchai.library.management.util.person.PersonNotCreatedException;
 import kidchai.library.management.util.person.PersonNotFoundException;
@@ -20,20 +22,26 @@ import java.util.List;
 public class PeopleController {
 
     private final PeopleService peopleService;
+    private final PersonMapperService mapperService;
 
     @Autowired
-    public PeopleController(PeopleService peopleService) {
+    public PeopleController(PeopleService peopleService, PersonMapperService mapperService) {
         this.peopleService = peopleService;
+        this.mapperService = mapperService;
     }
 
     @GetMapping()
-    public ResponseEntity<List<Person>> index() {
-        return ResponseEntity.ok(peopleService.findAll());
+    public ResponseEntity<List<PersonDTOForPerson>> index() {
+        List<PersonDTOForPerson> peopleDTO = peopleService.findAll().stream()
+                .map(mapperService::convertToDTO)
+                .toList();
+        return ResponseEntity.ok(peopleDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Person> show(@PathVariable("id") int id) {
-        return ResponseEntity.ok(peopleService.findOne(id));
+    public ResponseEntity<PersonDTOForPerson> show(@PathVariable("id") int id) {
+        PersonDTOForPerson personDTOForPerson = mapperService.convertToDTO(peopleService.findOne(id));
+        return ResponseEntity.ok(personDTOForPerson);
     }
 
     @PostMapping()

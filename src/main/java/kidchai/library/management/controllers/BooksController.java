@@ -1,9 +1,11 @@
 package kidchai.library.management.controllers;
 
 import jakarta.validation.Valid;
+import kidchai.library.management.dto.book.BookDTOForBook;
 import kidchai.library.management.models.Book;
 import kidchai.library.management.models.Person;
 import kidchai.library.management.services.BooksService;
+import kidchai.library.management.services.mappers.BookMapperService;
 import kidchai.library.management.util.book.BookErrorResponse;
 import kidchai.library.management.util.book.BookNotCreatedException;
 import kidchai.library.management.util.book.BookNotFoundException;
@@ -20,28 +22,38 @@ import java.util.List;
 public class BooksController {
 
     private final BooksService booksService;
+    private final BookMapperService mapperService;
 
-    public BooksController(BooksService booksService) {
+    public BooksController(BooksService booksService, BookMapperService mapperService) {
         this.booksService = booksService;
+        this.mapperService = mapperService;
     }
 
     @GetMapping()
-    public ResponseEntity<List<Book>> index(@RequestParam(value = "page", required = false) Integer page,
-                                            @RequestParam(value = "title", required = false) String title,
-                                            @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
-                                            @RequestParam(value = "sort_by_year", required = false) boolean isSortedByYear) {
-        if (title != null)
-            return ResponseEntity.ok(booksService.findByTitle(title));
+    public ResponseEntity<List<BookDTOForBook>> index(@RequestParam(value = "page", required = false) Integer page,
+                                                      @RequestParam(value = "title", required = false) String title,
+                                                      @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
+                                                      @RequestParam(value = "sort_by_year", required = false) boolean isSortedByYear) {
+        if (title != null) {
+            return ResponseEntity.ok(booksService.findByTitle(title)
+                    .stream()
+                    .map(mapperService::convertToDTO)
+                    .toList());
 
+        }
         List<Book> books = (page == null && booksPerPage == null) ?
                 booksService.findAll(isSortedByYear) :
                 booksService.findAllWithPagination(page, booksPerPage, isSortedByYear);
-        return ResponseEntity.ok(books);
+
+        return ResponseEntity.ok(books
+                .stream()
+                .map(mapperService::convertToDTO)
+                .toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> show(@PathVariable("id") int id) {
-        return ResponseEntity.ok(booksService.findOne(id));
+    public ResponseEntity<BookDTOForBook> show(@PathVariable("id") int id) {
+        return ResponseEntity.ok(mapperService.convertToDTO(booksService.findOne(id)));
     }
 
     @PostMapping()
