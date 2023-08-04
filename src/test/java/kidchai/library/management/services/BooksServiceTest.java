@@ -47,7 +47,7 @@ class BooksServiceTest {
         when(booksRepository.findAll(PageRequest.of(0, 2, Sort.by("year"))))
                 .thenReturn(new PageImpl<>(Arrays.asList(book1, book2)));
 
-        List<Book> result = booksService.findAllWithPagination(0, 2, true);
+        List<Book> result = booksService.findAll(0, 2, true);
 
         assertEquals(2, result.size());
         verify(booksRepository, times(1))

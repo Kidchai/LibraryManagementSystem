@@ -6,10 +6,13 @@ import kidchai.library.management.models.Book;
 import kidchai.library.management.models.Person;
 import kidchai.library.management.services.BooksService;
 import kidchai.library.management.services.mappers.BookMapperService;
+import kidchai.library.management.util.assemblers.BookModelAssembler;
 import kidchai.library.management.util.book.BookErrorResponse;
 import kidchai.library.management.util.book.BookNotCreatedException;
 import kidchai.library.management.util.book.BookNotFoundException;
 import kidchai.library.management.util.book.BookNotUpdatedException;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,43 +20,51 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/api/books")
 public class BooksController {
 
     private final BooksService booksService;
     private final BookMapperService mapperService;
+    private final BookModelAssembler assembler;
 
-    public BooksController(BooksService booksService, BookMapperService mapperService) {
+    public BooksController(BooksService booksService, BookMapperService mapperService, BookModelAssembler assembler) {
         this.booksService = booksService;
         this.mapperService = mapperService;
+        this.assembler = assembler;
     }
 
     @GetMapping()
-    public ResponseEntity<List<BookDTOForBook>> index(@RequestParam(value = "page", required = false) Integer page,
-                                                      @RequestParam(value = "title", required = false) String title,
-                                                      @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
-                                                      @RequestParam(value = "sort_by_year", required = false) boolean isSortedByYear) {
-        if (title != null) {
-            return ResponseEntity.ok(booksService.findByTitle(title)
-                    .stream()
-                    .map(mapperService::convertToDTO)
-                    .toList());
-
+    public CollectionModel<EntityModel<BookDTOForBook>> index(@RequestParam(value = "page", required = false) Integer page,
+                                                              @RequestParam(value = "title", required = false) String title,
+                                                              @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
+                                                              @RequestParam(value = "sort_by_year", required = false) boolean isSortedByYear) {
+        List<Book> books;
+        if (title != null)
+            books = booksService.findByTitle(title);
+        else {
+            if (page == null && booksPerPage == null)
+                books = booksService.findAll(isSortedByYear);
+            else
+                books = booksService.findAll(page, booksPerPage, isSortedByYear);
         }
-        List<Book> books = (page == null && booksPerPage == null) ?
-                booksService.findAll(isSortedByYear) :
-                booksService.findAllWithPagination(page, booksPerPage, isSortedByYear);
 
-        return ResponseEntity.ok(books
-                .stream()
+        List<EntityModel<BookDTOForBook>> booksDTO = books.stream()
                 .map(mapperService::convertToDTO)
-                .toList());
+                .map(assembler::toModel)
+                .toList();
+
+        return CollectionModel.of(booksDTO,
+                linkTo(methodOn(BooksController.class).index(page, title, booksPerPage, isSortedByYear)).withSelfRel());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookDTOForBook> show(@PathVariable("id") int id) {
-        return ResponseEntity.ok(mapperService.convertToDTO(booksService.findOne(id)));
+    public EntityModel<BookDTOForBook> show(@PathVariable("id") int id) {
+        BookDTOForBook book = mapperService.convertToDTO(booksService.findOne(id));
+        return assembler.toModel(book);
     }
 
     @PostMapping()
@@ -90,7 +101,6 @@ public class BooksController {
     @PatchMapping("/{id}/assign")
     public ResponseEntity<Book> assign(@PathVariable("id") int id, @RequestBody Person person) {
         return ResponseEntity.ok(booksService.assign(id, person));
-
     }
 
     @ExceptionHandler
