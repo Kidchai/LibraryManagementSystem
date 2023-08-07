@@ -1,0 +1,4 @@
+/.idea/
+/server/src/main/resources/database.properties
+/target/
+/.mvn/
