@@ -2,6 +2,7 @@ package kidchai.library.management.services;
 
 import kidchai.library.management.models.Person;
 import kidchai.library.management.repositories.PeopleRepository;
+import kidchai.library.management.util.person.PersonNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -51,9 +52,14 @@ class PeopleServiceTest {
     void testFindOneNotFound() {
         when(peopleRepository.findById(anyInt())).thenReturn(Optional.empty());
 
-        Person result = peopleService.findOne(1);
+        Exception exception = assertThrows(PersonNotFoundException.class, () -> {
+            peopleService.findOne(1);
+        });
 
-        assertNull(result);
+        String expectedMessage = "Person with this id not found";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
         verify(peopleRepository, times(1)).findById(1);
     }
 

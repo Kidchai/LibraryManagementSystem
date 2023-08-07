@@ -107,8 +107,6 @@ $ cd library-management-system
 $ docker-compose up
 ```
 
-Now you need just open your web browser and navigate to http://localhost:8080/api/books or http://localhost:8080/api/people.
-
 ## What about other versions?
 
 If you're interested in seeing how my application has evolved over time, you can check out the other branches, which

@@ -3,6 +3,7 @@ package kidchai.library.management.services;
 import kidchai.library.management.models.Book;
 import kidchai.library.management.models.Person;
 import kidchai.library.management.repositories.BooksRepository;
+import kidchai.library.management.util.book.BookNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -69,9 +70,14 @@ class BooksServiceTest {
     void testFindOneNotFound() {
         when(booksRepository.findById(anyInt())).thenReturn(Optional.empty());
 
-        Book result = booksService.findOne(1);
+        Exception exception = assertThrows(BookNotFoundException.class, () -> {
+            booksService.findOne(1);
+        });
 
-        assertNull(result);
+        String expectedMessage = "Book with this id not found";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
         verify(booksRepository, times(1)).findById(1);
     }
 

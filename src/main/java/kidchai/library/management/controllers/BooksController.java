@@ -11,6 +11,7 @@ import kidchai.library.management.util.book.BookErrorResponse;
 import kidchai.library.management.util.book.BookNotCreatedException;
 import kidchai.library.management.util.book.BookNotFoundException;
 import kidchai.library.management.util.book.BookNotUpdatedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ public class BooksController {
     private final BookMapperService mapperService;
     private final BookModelAssembler assembler;
 
+    @Autowired
     public BooksController(BooksService booksService, BookMapperService mapperService, BookModelAssembler assembler) {
         this.booksService = booksService;
         this.mapperService = mapperService;
@@ -105,9 +107,7 @@ public class BooksController {
 
     @ExceptionHandler
     private ResponseEntity<BookErrorResponse> handleException(BookNotFoundException exception) {
-        BookErrorResponse error = new BookErrorResponse(
-                "Book with this id not found",
-                System.currentTimeMillis());
+        BookErrorResponse error = new BookErrorResponse(exception.getMessage(), System.currentTimeMillis());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 

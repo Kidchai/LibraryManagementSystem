@@ -5,11 +5,14 @@ import kidchai.library.management.dto.person.PersonDTOForPerson;
 import kidchai.library.management.models.Person;
 import kidchai.library.management.services.PeopleService;
 import kidchai.library.management.services.mappers.PersonMapperService;
+import kidchai.library.management.util.assemblers.PersonModelAssembler;
 import kidchai.library.management.util.person.PersonErrorResponse;
 import kidchai.library.management.util.person.PersonNotCreatedException;
 import kidchai.library.management.util.person.PersonNotFoundException;
 import kidchai.library.management.util.person.PersonNotUpdatedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,31 +20,39 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/api/people")
 public class PeopleController {
 
     private final PeopleService peopleService;
     private final PersonMapperService mapperService;
+    private final PersonModelAssembler assembler;
 
     @Autowired
-    public PeopleController(PeopleService peopleService, PersonMapperService mapperService) {
+    public PeopleController(PeopleService peopleService, PersonMapperService mapperService, PersonModelAssembler assembler) {
         this.peopleService = peopleService;
         this.mapperService = mapperService;
+        this.assembler = assembler;
     }
 
     @GetMapping()
-    public ResponseEntity<List<PersonDTOForPerson>> index() {
-        List<PersonDTOForPerson> peopleDTO = peopleService.findAll().stream()
+    public CollectionModel<EntityModel<PersonDTOForPerson>> index() {
+        List<EntityModel<PersonDTOForPerson>> peopleDTO = peopleService.findAll().stream()
                 .map(mapperService::convertToDTO)
+                .map(assembler::toModel)
                 .toList();
-        return ResponseEntity.ok(peopleDTO);
+
+        return CollectionModel.of(peopleDTO,
+                linkTo(methodOn(PeopleController.class).index()).withSelfRel());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PersonDTOForPerson> show(@PathVariable("id") int id) {
-        PersonDTOForPerson personDTOForPerson = mapperService.convertToDTO(peopleService.findOne(id));
-        return ResponseEntity.ok(personDTOForPerson);
+    public EntityModel<PersonDTOForPerson> show(@PathVariable("id") int id) {
+        PersonDTOForPerson personDTO = mapperService.convertToDTO(peopleService.findOne(id));
+        return assembler.toModel(personDTO);
     }
 
     @PostMapping()
@@ -70,9 +81,7 @@ public class PeopleController {
 
     @ExceptionHandler
     private ResponseEntity<PersonErrorResponse> handleException(PersonNotFoundException exception) {
-        PersonErrorResponse error = new PersonErrorResponse(
-                "Person with this id not found",
-                System.currentTimeMillis());
+        PersonErrorResponse error = new PersonErrorResponse(exception.getMessage(), System.currentTimeMillis());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
