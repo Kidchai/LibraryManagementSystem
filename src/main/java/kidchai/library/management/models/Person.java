@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -11,6 +15,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "people")
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode
 public class Person {
     @Id
     @Column(name = "id")
@@ -32,43 +40,8 @@ public class Person {
             property = "id")
     private List<Book> books;
 
-    public Person() {
-    }
-
     public Person(String name, Date birthYear) {
         this.name = name;
         this.birthYear = birthYear;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Date getBirthYear() {
-        return birthYear;
-    }
-
-    public void setBirthYear(Date birthYear) {
-        this.birthYear = birthYear;
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
     }
 }

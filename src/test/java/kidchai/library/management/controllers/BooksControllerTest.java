@@ -68,7 +68,7 @@ public class BooksControllerTest {
                         .content(objectMapper.writeValueAsString(newBook)))
                 .andExpect(status().isOk());
 
-        verify(booksService, times(1)).save(any(Book.class));
+        verify(booksService, times(1)).save(newBook);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class BooksControllerTest {
                         .content(objectMapper.writeValueAsString(book)))
                 .andExpect(status().isOk());
 
-        verify(booksService, times(1)).update(eq(bookId), any(Book.class));
+        verify(booksService, times(1)).update(bookId, book);
     }
 
     @Test
@@ -119,6 +119,6 @@ public class BooksControllerTest {
                         .content(objectMapper.writeValueAsString(person)))
                 .andExpect(status().isOk());
 
-        verify(booksService, times(1)).assign(eq(bookId), any(Person.class));
+        verify(booksService, times(1)).assign(bookId, person);
     }
 }

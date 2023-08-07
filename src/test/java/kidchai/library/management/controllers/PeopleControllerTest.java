@@ -69,7 +69,7 @@ public class PeopleControllerTest {
                         .content(objectMapper.writeValueAsString(newPerson)))
                 .andExpect(status().isOk());
 
-        verify(peopleService, times(1)).save(any(Person.class));
+        verify(peopleService, times(1)).save(newPerson);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class PeopleControllerTest {
                         .content(objectMapper.writeValueAsString(person)))
                 .andExpect(status().isOk());
 
-        verify(peopleService, times(1)).update(eq(personId), any(Person.class));
+        verify(peopleService, times(1)).update(personId, person);
     }
 
     @Test
