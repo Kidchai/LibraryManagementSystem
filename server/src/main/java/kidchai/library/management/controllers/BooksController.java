@@ -24,6 +24,7 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/books")
 public class BooksController {
@@ -70,8 +71,7 @@ public class BooksController {
     }
 
     @PostMapping()
-    public ResponseEntity<Book> create(@RequestBody @Valid Book book,
-                                       BindingResult bindingResult) {
+    public ResponseEntity<Book> create(@RequestBody @Valid Book book, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errors = getExceptionMessage(bindingResult);
             throw new BookNotCreatedException(errors);

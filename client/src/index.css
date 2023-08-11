@@ -1,0 +1,31 @@
+@import "https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css";
+
+/* Общие стили для всего приложения */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f1f6;
+    color: #333;
+}
+
+/* Стили для заголовков */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Courier New', monospace; /* Моноширинный текст */
+    text-decoration: underline; /* Подчеркивание */
+    text-decoration-color: #ffc0cb; /* Нежно-розовый цвет */
+}
+
+/* Стили для карточек */
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тени для карточек */
+    border: none; /* Убираем стандартные границы Bootstrap для карточек */
+}
+
+/* Стили для кнопок */
+.btn {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тени для кнопок */
+}
+
+/* Если хочешь дополнительно задать светлую палитру, можешь определить цвета для основных элементов */
+.container, .card, .navbar {
+    background-color: #ffffff;
+}
